@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 const client = new Discord.Client();
 const settings = require("./settings.json");
 const randomInt = require('random-int');
-var MongoClient = require('mongodb').MongoClient;
+//var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
  
 var guildID = settings.guildID;
@@ -17,7 +17,7 @@ var newcomerChannelID = settings.newcomerChannelID;
 var joinleaveChannelID = settings.joinleaveChannelID;
 var manualApprovalChannelID = settings.manualApprovalChannelID;
 var welcomeAndRulesChannelID = settings.welcomeAndRulesChannelID;
-var worksafeGeneralChannelID = settings.worksaveGeneralChannelID;
+var worksafeGeneralChannelID = settings.worksafeGeneralChannelID;
 var nsfwGeneralChannelID = settings.nsfwGeneralChannelID;
  
 var raid = false;
@@ -33,25 +33,20 @@ function hasRole(member, role) {
 }
  
 function isMention(arg) {
+	if (arg == null) return false;
     var res = arg.replace(/</g, "").replace(/@/g, "").replace(/>/g, "").replace(/!/g, "");
     return client.guilds.get(guildID).members.find("id", res);
 }
  
 //rawName being Nickname if there is one, otherwise username
-async function mentiontorawName(arg) {
+function mentiontorawName(arg) {
     var isNickname = arg.startsWith("<@!");
  
     var res = arg.replace(/</g, "").replace(/@/g, "").replace(/>/g, "").replace(/!/g, "");
- 
-    try {
-        var GMember = await client.guilds.get(guildID).fetchMember(res);
-        if (isNickname) {
-            return GMember.nickname;
-        } else {
-            return GMember.user.username
-        }
-    } catch (e) {
-        console.error(e);
+    if (isNickname) {
+        return client.guilds.get(guildID).members.find("id", res).nickname;
+    } else {
+        return client.guilds.get(guildID).members.find("id", res).user.username;
     }
 }
  
@@ -62,20 +57,18 @@ function deleteTheMessages(message, number) {
         } else { //else, delete args[1] messages
             msg = parseInt(number);
         }
-        message.channel.fetchMessages({limit: msg})
-         .then(messages => message.channel.bulkDelete(messages))
-         .catch(console.error);
+        message.channel.fetchMessages({limit: msg}).then(messages => message.channel.bulkDelete(messages)).catch(console.error);
 }
  
 function isJoinable(role) {
     return false; //TODO
 }
- 
-MongoClient.connect(process.env.DB_URL, function(err, db) {
+/*
+MongoClient.connect(settings.url, function(err, db) {
   assert.equal(null, err);
   console.log("Connected correctly to server.");
   db.close();
-});
+});*/
  
 client.on('guildMemberUpdate', (oldMember, newMember) => {
     if (!hasRole(oldMember, trustedID) && (hasRole(newMember, trustedID))) { //If we added the "Trusted" role to them
@@ -120,8 +113,7 @@ client.on('message', message => {
         return;
     }
     if ((raid) && (hasRole(message.member, newID)) && (!(message.channel.id == newcomerChannelID))) message.delete(); //deletes raider messages
- 
-    console.log("raw message: " + message.content);
+   
     let args = message.content.split(' ').slice(1);
     var argsStringResult = args.join(' ');
  
@@ -144,44 +136,26 @@ client.on('message', message => {
     } else
  
     if (message.content.toLowerCase().startsWith(prefix + 'boop') && (isMention(args[0]))) {
-        var isNickname = args[0].startsWith("<@!");
-        var res = args[0].replace(/</g, "").replace(/@/g, "").replace(/>/g, "").replace(/!/g, "");
-        var rawName;
-        client.guilds.get(guildID).fetchMember(res).then(function(GMember) {
-            if (isNickname) {
-                rawName = GMember.nickname;
-            } else {
-                rawName = GMember.user.username
-            }
-            message.channel.send(`*boops ${rawName}*`);
-        }, function() {
-            console.error;
-        });
+        message.channel.send(`*boops ${mentiontorawName(args[0])}*`);
     } else
  
     if (message.content.toLowerCase().startsWith(prefix + 'slap') && (isMention(args[0]))) {
-        var rawName;
-        mentiontorawName(args[0])
-            .then((rawname) => {
-                rawName = rawname;
-            })
-            .catch((err) => {
-                console.error(err);
-            })
-        message.channel.send(`*slaps ${rawName}*`);
+        message.channel.send(`*slaps ${mentiontorawName(args[0])}*`);
     } else
  
     if (message.content.toLowerCase().startsWith(prefix + 'bap') && (isMention(args[0]))) {
-        var rawName = mentiontorawName(args[0]);
         message.channel.send(`*baps ${mentiontorawName(args[0])}*`);
     } else
 
-	if (message.content.toLowerCase().startsWith(prefix + '8ball')) {
-        message.channel.send(`Yes.`);
+	if (message.content.toLowerCase().startsWith(prefix + 'doot')) {
+		if (isMention(args[0])) {
+			message.channel.send(`*doots her trumpet at ${mentiontorawName(args[0])}!*`);
+		} else {
+			message.channel.send(`*doots her trumpet!* ^^`);
+		}
     } else
  
     if (message.content.toLowerCase().startsWith(prefix + 'rape') && (isMention(args[0]))) {
-        var rawName = mentiontorawName(args[0]);
         var randomRape = [`*takes ${mentiontorawName(args[0])} to a fancy restaurant*`,
                         `*comforts ${mentiontorawName(args[0])} and takes them to see a therapist*`];
         var pick = randomInt(randomRape.length - 1);
@@ -230,3 +204,4 @@ client.login(process.env.BOT_TOKEN);
 //https://anidiotsguide.gitbooks.io/discord-js-bot-guide/video-guides/episode-01.html
 //https://docs.mongodb.com/getting-started/node/introduction/
 //https://discordapp.com/oauth2/authorize?client_id=326740767886278660&scope=bot&permissions=0
+ 
