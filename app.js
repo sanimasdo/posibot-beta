@@ -41,13 +41,13 @@ function isMention(arg) {
  
 //rawName being Nickname if there is one, otherwise username
 function mentiontorawName(arg) {
-    var isNickname = arg.startsWith("<@!");
- 
     var res = arg.replace(/</g, "").replace(/@/g, "").replace(/>/g, "").replace(/!/g, "");
-    if (isNickname) {
-        return client.guilds.get(guildID).members.find("id", res).nickname;
+	var theMember = client.guilds.get(guildID).members.find("id", res);
+
+    if (theMember.nickname == null) {
+        return theMember.user.username;
     } else {
-        return client.guilds.get(guildID).members.find("id", res).user.username;
+        return theMember.nickname;
     }
 }
  
