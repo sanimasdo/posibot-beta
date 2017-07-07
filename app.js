@@ -19,6 +19,7 @@ var welcomeAndRulesChannelID = process.env.ID_CHANNEL_WELCOMEANDRULES;
 var worksafeGeneralChannelID = process.env.ID_CHANNEL_WORKSAFEGENERAL;
 var nsfwGeneralChannelID = process.env.ID_CHANNEL_NSFWGENERAL;
 var readylog = process.env.READY_LOG;
+var prefix = process.env.PREFIX;
  
 var raid = false;
 var switched = false;
@@ -105,7 +106,6 @@ client.on('guildBanRemove', (guild, user) => {
  
 //Message events (chat commands)
  
-var prefix = "ph";
 client.on('message', message => {
     if (message.author.bot) return; //to prevent a loop where the bot endlessley triggers itself to message
     if (message.channel.type === 'dm') { //to prevent DMs from doing shiieet to the bot
