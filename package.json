@@ -10,7 +10,6 @@
   "license": "ISC",
   "dependencies": {
     "discord.js": "^11.1.0",
-    "mongodb": "^2.2.29",
     "random-int": "^1.0.0"
   }
 }

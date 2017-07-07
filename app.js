@@ -3,7 +3,7 @@ const client = new Discord.Client();
 const settings = require("./settings.json");
 const randomInt = require('random-int');
 //var MongoClient = require('mongodb').MongoClient;
-var assert = require('assert');
+//var assert = require('assert');
  
 var guildID = settings.guildID;
  
@@ -160,6 +160,15 @@ client.on('message', message => {
                         `*comforts ${mentiontorawName(args[0])} and takes them to see a therapist*`];
         var pick = randomInt(randomRape.length - 1);
         message.channel.send(randomRape[pick]);
+    } else
+
+=   if (message.content.toLowerCase().startsWith(prefix + '8ball')) {
+        var random8ball = [`It is certain.`, `It is decidedly so.`, `Without a doubt.`, `Yes definitely.`, `You may rely on it.`,
+			`As I see it, yes.`, `Most likely.`, `Outlook good.`, `Yes.`, `Signs point to yes.`, `Reply hazy try again.`,
+			`Better not tell you now.`, `Cannot predict now.`, `Concentrate and ask again.`, `Don't count on it.`, `My reply is no.`,
+			`My sources say no.`, `Outlook not so good.`, `Very doubtful.`];
+        var pick = randomInt(random8ball.length - 1);
+        message.channel.send(random8ball[pick]);
     } else
     /*
  
