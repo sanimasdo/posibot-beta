@@ -5,26 +5,27 @@ const randomInt = require('random-int');
 //var MongoClient = require('mongodb').MongoClient;
 //var assert = require('assert');
  
-var guildID = settings.guildID;
+var guildID = process.env.ID_GUILD;
  
-var newID = settings.newID;
-var readyID = settings.readyID;
-var trustedID = settings.trustedID;
-var modID = settings.modID;
-var adminID = settings.adminID;
+var newID = process.env.ID_ROLE_NEW;
+var readyID = process.env.ID_ROLE_READY;
+var trustedID = process.env.ID_ROLE_TRUSTED;
+var modID = process.env.ID_ROLE_MOD;
+var adminID = process.env.ID_ROLE_ADMIN;
  
-var newcomerChannelID = settings.newcomerChannelID;
-var joinleaveChannelID = settings.joinleaveChannelID;
-var manualApprovalChannelID = settings.manualApprovalChannelID;
-var welcomeAndRulesChannelID = settings.welcomeAndRulesChannelID;
-var worksafeGeneralChannelID = settings.worksafeGeneralChannelID;
-var nsfwGeneralChannelID = settings.nsfwGeneralChannelID;
+var newcomerChannelID = process.env.ID_CHANNEL_NEWCOMERS;
+var joinleaveChannelID = process.env.ID_CHANNEL_JOINLEAVE;
+var manualApprovalChannelID = process.env.ID_CHANNEL_MANUALAPPROVAL;
+var welcomeAndRulesChannelID = process.env.ID_CHANNEL_WELCOMEANDRULES;
+var worksafeGeneralChannelID = process.env.ID_CHANNEL_WORKSAFEGENERAL;
+var nsfwGeneralChannelID = process.env.ID_CHANNEL_NSFWGENERAL;
+var readylog = process.env.READY_LOG;
  
 var raid = false;
 var switched = false;
  
 client.on('ready', () => {
-    console.log(settings.readyLog);
+    console.log(readylog);
     client.user.setGame("hypnosis files");
 })
  
