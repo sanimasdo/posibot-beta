@@ -1,1 +1,1 @@
-worker: node app.js
+worker: nf run nodemon
