@@ -25,7 +25,7 @@ var raid = false;
 var switched = false;
  
 client.on('ready', () => {
-    console.log(readylog);
+    console.log(readyID);
     client.user.setGame("hypnosis files");
 })
  
