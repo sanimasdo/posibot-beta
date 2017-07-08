@@ -292,7 +292,6 @@ client.on('message', message => {
     } else
 
 	if (message.content.toLowerCase().startsWith(prefix + 'hypnoqueue')) {
-		queue[guildID].songs = [];
 		queue[guildID].songs.push({url: 'https://www.youtube.com/watch?v=JO98V-w4ghM', title: '2017-05-14 Transformation Session 1', requester: 'PosiBot'});
 		queue[guildID].songs.push({url: 'https://www.youtube.com/watch?v=tsiEoiwYZQQ', title: '2017-05-17 Transformation Session 2', requester: 'PosiBot'});
 		queue[guildID].songs.push({url: 'https://www.youtube.com/watch?v=CULTVCodw1k', title: '2017-05-23 Lucid dreaming session 1', requester: 'PosiBot'});
