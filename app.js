@@ -240,7 +240,7 @@ client.on('message', message => {
     let args = message.content.split(' ').slice(1);
     var argsStringResult = args.join(' ');
  
-    if ((message.content.toLowerCase().startsWith(prefix + 'donebeingnew')) && (message.channel.id == newcomerChannelID)) {
+    if ((message.content.toLowerCase().includes(prefix + 'donebeingnew')) && (message.channel.id == newcomerChannelID)) {
         message.delete();
         if (!hasRole(message.member, readyID)) {
             client.channels.get(manualApprovalChannelID).send(`${message.member.user} has read the rules.`);
