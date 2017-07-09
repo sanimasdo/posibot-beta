@@ -242,7 +242,7 @@ client.on('message', message => {
  
     if ((message.content.toLowerCase().includes(prefix + 'donebeingnew')) && (message.channel.id == newcomerChannelID)) {
         message.delete();
-        if (!hasRole(message.member, readyID)) {
+        if ((!hasRole(message.member, readyID)) && (!hasRole(message.member, trustedID)) && (!hasRole(message.member, SFWID))) {
             client.channels.get(manualApprovalChannelID).send(`${message.member.user} has read the rules.`);
             message.member.addRole(readyID);
         }
