@@ -2,33 +2,36 @@ const Discord = require("discord.js");
 const client = new Discord.Client();
 const randomInt = require('random-int');
 const yt = require('ytdl-core');
-//var MongoClient = require('mongodb').MongoClient;
-//var assert = require('assert');
+const fs = require("fs");
+let joinableroles = JSON.parse(fs.readFileSync("./joinableroles.json", "utf8"))[process.env.WHICH_LIST];
  
-var guildID = process.env.ID_GUILD;
+const guildID = process.env.ID_GUILD;
  
-var newID = process.env.ID_ROLE_NEW;
-var readyID = process.env.ID_ROLE_READY;
-var SFWID = process.env.ID_ROLE_SFW;
-var trustedID = process.env.ID_ROLE_TRUSTED;
-var modID = process.env.ID_ROLE_MOD;
-var adminID = process.env.ID_ROLE_ADMIN;
+const newID = process.env.ID_ROLE_NEW;
+const readyID = process.env.ID_ROLE_READY;
+const SFWID = process.env.ID_ROLE_SFW;
+const trustedID = process.env.ID_ROLE_TRUSTED;
+const modID = process.env.ID_ROLE_MOD;
+const adminID = process.env.ID_ROLE_ADMIN;
  
-var newcomerChannelID = process.env.ID_CHANNEL_NEWCOMERS;
-var joinleaveChannelID = process.env.ID_CHANNEL_JOINLEAVE;
-var manualApprovalChannelID = process.env.ID_CHANNEL_MANUALAPPROVAL;
-var welcomeAndRulesChannelID = process.env.ID_CHANNEL_WELCOMEANDRULES;
-var worksafeGeneralChannelID = process.env.ID_CHANNEL_WORKSAFEGENERAL;
-var nsfwGeneralChannelID = process.env.ID_CHANNEL_NSFWGENERAL;
+const newcomerChannelID = process.env.ID_CHANNEL_NEWCOMERS;
+const joinleaveChannelID = process.env.ID_CHANNEL_JOINLEAVE;
+const manualApprovalChannelID = process.env.ID_CHANNEL_MANUALAPPROVAL;
+const welcomeAndRulesChannelID = process.env.ID_CHANNEL_WELCOMEANDRULES;
+const worksafeGeneralChannelID = process.env.ID_CHANNEL_WORKSAFEGENERAL;
+const nsfwGeneralChannelID = process.env.ID_CHANNEL_NSFWGENERAL;
+const roleRequestChannelID = process.env.ID_CHANNEL_ROLEREQUEST;
+const botChannelID = process.env.ID_CHANNEL_BOT;
 
-var readylog = process.env.READY_LOG;
-var prefix = process.env.PREFIX;
+const readylog = process.env.READY_LOG;
+const prefix = process.env.PREFIX;
 var passes = 1;
  
 var raid = false;
 var switched = false;
  
 client.on('ready', () => {
+	console.log(joinableroles);
     console.log(readylog);
     client.user.setGame("hypnosis files");
 });
@@ -39,10 +42,10 @@ queue[guildID] = {};
 queue[guildID].playing = false;
 queue[guildID].songs = [];
 
-const commands = {
+const musicCommands = {
 	'play': (msg) => {
 		if (queue[msg.guild.id] === undefined) return msg.channel.send(`Add some songs to the queue first with ${prefix}add`);
-		if (!msg.guild.voiceConnection) return commands.join(msg).then(() => commands.play(msg));
+		if (!msg.guild.voiceConnection) return musicCommands.join(msg).then(() => musicCommands.play(msg));
 		if (queue[msg.guild.id].playing) return msg.channel.send('Already Playing');
 		let dispatcher;
 		queue[msg.guild.id].playing = true;
@@ -116,10 +119,20 @@ const commands = {
 		queue[msg.guild.id].songs.forEach((song, i) => { tosend.push(`${i+1}. ${song.title} - Requested by: ${song.requester}`);});
 		msg.channel.send(`__**${msg.guild.name}'s Music Queue:**__ Currently **${tosend.length}** songs queued ${(tosend.length > 15 ? '*[Only next 15 shown]*' : '')}\n\`\`\`${tosend.slice(0,15).join('\n')}\`\`\``);
 	},
-	'help': (msg) => {
+	'hypnoqueue': (msg) => {
+		queue[guildID].songs.push({url: 'https://www.youtube.com/watch?v=JO98V-w4ghM', title: '2017-05-14 Transformation Session 1', requester: 'PosiBot'});
+		queue[guildID].songs.push({url: 'https://www.youtube.com/watch?v=tsiEoiwYZQQ', title: '2017-05-17 Transformation Session 2', requester: 'PosiBot'});
+		queue[guildID].songs.push({url: 'https://www.youtube.com/watch?v=CULTVCodw1k', title: '2017-05-23 Lucid dreaming session 1', requester: 'PosiBot'});
+		queue[guildID].songs.push({url: 'https://www.youtube.com/watch?v=2NEKTBawiVs', title: '2017-05-30 Anxiety reduction session 1', requester: 'PosiBot'});
+		queue[guildID].songs.push({url: 'https://www.youtube.com/watch?v=U69aeFgcpWg', title: '2017-05-31 Imposition session 1', requester: 'PosiBot'});
+		msg.channel.send(`added **some recorded live hypno sessions** to the queue`);
+	},
+	'musichelp': (msg) => {
+		msg.channel.send(`Use these commands only in ${client.channels.get(botChannelID)}`);
 		let tosend = ['```xl', prefix + 'join : "Join Voice channel of msg sender"',
 		prefix + 'add : "Add a valid youtube link to the queue"',
 		prefix + 'queue : "Shows the current queue, up to 15 songs shown."',
+		prefix + 'hypnoqueue : "Add a bunch of recorded live hypno sessions to the queue."',
 		prefix + 'play : "Play the music queue if already joined to a voice channel"',
 		'', 'the following commands only function while the play command is running:'.toUpperCase(),
 		prefix + 'pause : "pauses the music"',	prefix + 'resume : "resumes the music"',
@@ -131,6 +144,128 @@ const commands = {
 	},
 	'reboot': (msg) => {
 		if (msg.author.id == adminID) process.exit(); //Requires a node module like Forever to work.
+	}
+};
+
+const rpCommands = {
+	'boop': (message, args) => {
+		if (isMention(args[0])) {
+			message.channel.send(`*boops ${mentiontorawName(args[0])}*`);
+		}
+	},
+	'bap': (message, args) => {
+		if (isMention(args[0])) {
+			message.channel.send(`*baps ${mentiontorawName(args[0])}*`);
+		}
+	},
+	'slap': (message, args) => {
+		if (isMention(args[0])) {
+			message.channel.send(`*slaps ${mentiontorawName(args[0])}*`);
+		}
+	},
+	'rape': (message, args) => {
+		if (isMention(args[0])) {
+			var randomRape = [`*takes ${mentiontorawName(args[0])} to a fancy restaurant*`,
+                        `*comforts ${mentiontorawName(args[0])} and takes them to see a therapist*`];
+			var pick = randomInt(randomRape.length - 1);
+			message.channel.send(randomRape[pick]);
+		}
+	},
+	'doot': (message, args) => {
+		if (isMention(args[0])) {
+			message.channel.send(`*doots her trumpet at ${mentiontorawName(args[0])}!*`);
+		} else {
+			message.channel.send(`*doots her trumpet!* ^^`);
+		}
+	},
+	'8ball': (message, args) => {
+        var random8ball = [`It is certain.`, `It is decidedly so.`, `Without a doubt.`, `Yes definitely.`, `You may rely on it.`,
+			`As I see it, yes.`, `Most likely.`, `Outlook good.`, `Yes.`, `Signs point to yes.`, `Reply hazy try again.`,
+			`Better not tell you now.`, `Cannot predict now.`, `Concentrate and ask again.`, `Don't count on it.`, `My reply is no.`,
+			`My sources say no.`, `Outlook not so good.`, `Very doubtful.`];
+        var pick = randomInt(random8ball.length - 1);
+        message.channel.send(random8ball[pick]);
+	},
+	'roundhouse': (message, args) => {
+		if (isMention(args[0])) {
+			message.channel.send(`*Roundhouses ${mentiontorawName(args[0])}, Right in the noggin!*`);
+		}
+	},
+	'rphelp': (message) => {
+		let tosend = ['```xl', prefix + 'boop : "Boop \'em!."',
+		prefix + 'bap : "Bap \'em!."',
+		prefix + 'slap : "Slap \'em!"',
+		prefix + '8ball : "I will tell the future for you."',
+		prefix + 'doot : "I will play my trumpet."',	'```'];
+		message.channel.send(tosend.join('\n'));
+	}
+};
+
+const joinableRoleCommands = {
+	'viewjrs': (message, argsStringResult) => {
+		if (joinableroles == []) {
+            message.channel.send("There are no joinable roles yet.");
+        } else {
+            var roleString = "";
+            for (var i = 0; i < joinableroles.length; i++) {
+                roleString += joinableroles[i] + "\n";
+            }
+            message.channel.send("The joinable roles are: \n**" + roleString + "**");           
+        }
+	},
+	'jr': (message, argsStringResult) => {
+		if (hasRole(message.member, adminID)) {
+			if (!argsStringResult) return;
+			if (isJoinable(argsStringResult)) {
+				removeJoinable(argsStringResult);
+				message.channel.send(`${argsStringResult} is now no longer joinable. Type **${message.content}** again to undo.`);
+ 
+			} else if (message.guild.roles.find("name", argsStringResult)) { // is a real role
+				if ((message.guild.roles.find("name", argsStringResult).id == adminID) || (message.guild.roles.find("name", argsStringResult).id == modID)) {
+					message.channel.send("What are you doing!!!");
+				} else {
+					addJoinable(argsStringResult);
+					message.channel.send(`${argsStringResult} is now joinable. Type **${message.content}** again to undo.`);
+				}
+			} else {
+				message.channel.send(`${argsStringResult} is not a real role!`);
+			}
+		}	
+	},
+	'iam': (message, argsStringResult) => {
+		if (!argsStringResult) return;
+        else if (isJoinable(argsStringResult)) {
+            var theRole = message.guild.roles.find("name", argsStringResult);
+            if (hasRole(message.member, theRole.id)) {
+                message.channel.send(`You already have this role!`);
+            } else {
+                message.member.addRole(theRole);
+                message.channel.send(`Success! You now have the role **${argsStringResult}!**`);       
+            }
+ 
+        } else {
+            message.channel.send(`${argsStringResult} is either not joinable or doesn't exist.`);
+        }
+	},
+	'imnot': (message, argsStringResult) => {
+		if (!argsStringResult) return;
+        else if (isJoinable(argsStringResult)) {
+            var theRole = message.guild.roles.find("name", argsStringResult);
+            message.member.removeRole(theRole);
+            message.channel.send(`Success! You no longer have the role **${argsStringResult}.**`);
+ 
+        } else {
+            message.channel.send(`${argsStringResult} is either not joinable or doesn't exist.`);
+        }
+	},
+	'jrhelp': (message) => {
+		message.channel.send(`Use these commands only in ${client.channels.get(roleRequestChannelID)}`);
+		let tosend = ['```xl',
+		prefix + 'ViewJRs : "View all the roles you can join."',
+		prefix + 'JR : "Admin only: Add/remove a joinable role."',
+		prefix + 'Iam : "Join a role."',
+		prefix + 'ImNot : "Leave a role."',	'```'];
+		message.channel.send(tosend.join('\n'));
 	}
 };
  
@@ -165,16 +300,34 @@ function deleteTheMessages(message, number) {
         }
         message.channel.fetchMessages({limit: msg}).then(messages => message.channel.bulkDelete(messages)).catch(console.error);
 }
- 
+
 function isJoinable(role) {
-    return false; //TODO
+    return (joinableroles.indexOf(role) > -1);
 }
-/*
-MongoClient.connect(settings.url, function(err, db) {
-  assert.equal(null, err);
-  console.log("Connected correctly to server.");
-  db.close();
-});*/
+ 
+function addJoinable(role) {
+    joinableroles.push(role);
+	var fullfile = JSON.parse(fs.readFileSync("./joinableroles.json", "utf8"));
+	fullfile[process.env.WHICH_LIST] = joinableroles;
+
+    fs.writeFile("./joinableroles.json", JSON.stringify(fullfile), (err) => {
+        if (err) console.error(err)
+    });
+}
+ 
+function removeJoinable(role) {
+    if (joinableroles == []) return;
+    var index = joinableroles.indexOf(role);
+    if (index > -1) {
+        joinableroles.splice(index, 1);
+		var fullfile = JSON.parse(fs.readFileSync("./joinableroles.json", "utf8"));
+		fullfile[process.env.WHICH_LIST] = joinableroles;
+
+        fs.writeFile("./joinableroles.json", JSON.stringify(fullfile), (err) => {
+            if (err) console.error(err)
+        });
+    }
+}
  
 client.on('guildMemberUpdate', (oldMember, newMember) => {
     if (!hasRole(oldMember, trustedID) && (hasRole(newMember, trustedID))) { //If we added the "Trusted" role to them
@@ -193,12 +346,11 @@ client.on('guildMemberUpdate', (oldMember, newMember) => {
 	}
 });
 
-/*
 client.on('roleDelete', (role) => {
-	if mongodatabase.joinableRoles.contains(role) {
-		mongodatabase.joinableRoles.remove(argsStringResult);
-	}
-});*/
+    if (isjoinable(role.name)) {
+        removeJoinable(role.name);
+    }
+});
  
 //client.on('',''=>{});
  
@@ -239,75 +391,63 @@ client.on('message', message => {
    
     let args = message.content.split(' ').slice(1);
     var argsStringResult = args.join(' ');
+	var m = message.content.toLowerCase();
  
-    if ((message.content.toLowerCase().includes(prefix + 'donebeingnew')) && (message.channel.id == newcomerChannelID)) {
+    if ((m.includes(prefix + 'donebeingnew')) && (message.channel.id == newcomerChannelID)) {
         message.delete();
         if ((!hasRole(message.member, readyID)) && (!hasRole(message.member, trustedID)) && (!hasRole(message.member, SFWID))) {
             client.channels.get(manualApprovalChannelID).send(`${message.member.user} has read the rules.`);
             message.member.addRole(readyID);
         }
     } else
- 
-    if (message.content.toLowerCase().startsWith(prefix + 'setgame') && (hasRole(message.member, adminID))) {
+
+    if (m.startsWith(prefix + 'setgame') && (hasRole(message.member, adminID))) {
         if (!argsStringResult) argsStringResult = 'hypnosis files';
         client.user.setGame(argsStringResult);
     } else
  
-    if (message.content.toLowerCase().startsWith(prefix + 'setstatus') && (hasRole(message.member, adminID))) {
+    if (m.startsWith(prefix + 'setstatus') && (hasRole(message.member, adminID))) {
         if (!argsStringResult) argsStringResult = 'online';
         client.user.setStatus(argsStringResult);
     } else
- 
-    if (message.content.toLowerCase().startsWith(prefix + 'boop') && (isMention(args[0]))) {
-        message.channel.send(`*boops ${mentiontorawName(args[0])}*`);
-    } else
- 
-    if (message.content.toLowerCase().startsWith(prefix + 'slap') && (isMention(args[0]))) {
-        message.channel.send(`*slaps ${mentiontorawName(args[0])}*`);
-    } else
- 
-    if (message.content.toLowerCase().startsWith(prefix + 'bap') && (isMention(args[0]))) {
-        message.channel.send(`*baps ${mentiontorawName(args[0])}*`);
-    } else
 
-	if (message.content.toLowerCase().startsWith(prefix + 'doot')) {
-		if (isMention(args[0])) {
-			message.channel.send(`*doots her trumpet at ${mentiontorawName(args[0])}!*`);
-		} else {
-			message.channel.send(`*doots her trumpet!* ^^`);
-		}
-    } else
- 
-    if (message.content.toLowerCase().startsWith(prefix + 'rape') && (isMention(args[0]))) {
-        var randomRape = [`*takes ${mentiontorawName(args[0])} to a fancy restaurant*`,
-                        `*comforts ${mentiontorawName(args[0])} and takes them to see a therapist*`];
-        var pick = randomInt(randomRape.length - 1);
-        message.channel.send(randomRape[pick]);
-    } else
-
-    if (message.content.toLowerCase().startsWith(prefix + '8ball')) {
-        var random8ball = [`It is certain.`, `It is decidedly so.`, `Without a doubt.`, `Yes definitely.`, `You may rely on it.`,
-			`As I see it, yes.`, `Most likely.`, `Outlook good.`, `Yes.`, `Signs point to yes.`, `Reply hazy try again.`,
-			`Better not tell you now.`, `Cannot predict now.`, `Concentrate and ask again.`, `Don't count on it.`, `My reply is no.`,
-			`My sources say no.`, `Outlook not so good.`, `Very doubtful.`];
-        var pick = randomInt(random8ball.length - 1);
-        message.channel.send(random8ball[pick]);
-    } else
-
-	if (message.content.toLowerCase().startsWith(prefix + 'hypnoqueue')) {
-		queue[guildID].songs.push({url: 'https://www.youtube.com/watch?v=JO98V-w4ghM', title: '2017-05-14 Transformation Session 1', requester: 'PosiBot'});
-		queue[guildID].songs.push({url: 'https://www.youtube.com/watch?v=tsiEoiwYZQQ', title: '2017-05-17 Transformation Session 2', requester: 'PosiBot'});
-		queue[guildID].songs.push({url: 'https://www.youtube.com/watch?v=CULTVCodw1k', title: '2017-05-23 Lucid dreaming session 1', requester: 'PosiBot'});
-		queue[guildID].songs.push({url: 'https://www.youtube.com/watch?v=2NEKTBawiVs', title: '2017-05-30 Anxiety reduction session 1', requester: 'PosiBot'});
-		queue[guildID].songs.push({url: 'https://www.youtube.com/watch?v=U69aeFgcpWg', title: '2017-05-31 Imposition session 1', requester: 'PosiBot'});
+	if (m.startsWith(prefix + 'help')) {
+		let tosend = ['```xl', prefix + 'MusicHelp : "View music commands."',
+		prefix + 'JRhelp : "View joinable role commands."',
+		prefix + 'RPhelp : "View rp commands."',	'```'];
+		message.channel.send(tosend.join('\n'));
 	} else
 
-	if (commands.hasOwnProperty(message.content.toLowerCase().slice(prefix.length).split(' ')[0])) {
-		commands[message.content.toLowerCase().slice(prefix.length).split(' ')[0]](message)
+	if (((m.startsWith(prefix + 'join')) || (m.startsWith(prefix + 'add')) ||
+		(m.startsWith(prefix + 'queue')) || (m.startsWith(prefix + 'hypnoqueue')) ||
+		(m.startsWith(prefix + 'play')) || (m.startsWith(prefix + 'pause')) ||
+		(m.startsWith(prefix + 'resume')) || (m.startsWith(prefix + 'skip')) ||
+		(m.startsWith(prefix + 'time')) || (m.startsWith('volume'))) && 
+		(!(message.channel.id == botChannelID))) {
+		message.channel.send(`Keep music commands in ${client.channels.get(botChannelID)}.`);
+		return;
+	}
+
+	if (((m.startsWith(prefix + 'viewjrs')) || (m.startsWith(prefix + 'iam')) ||
+		(m.startsWith(prefix + 'imnot'))) && (!(message.channel.id == roleRequestChannelID))) {
+		message.channel.send(`Keep role commands in ${client.channels.get(roleRequestChannelID)}.`);
+		return;
+	}
+
+	if (musicCommands.hasOwnProperty(m.slice(prefix.length).split(' ')[0])) {
+		musicCommands[m.slice(prefix.length).split(' ')[0]](message)
+	} else
+
+	if (rpCommands.hasOwnProperty(m.slice(prefix.length).split(' ')[0])) {
+		rpCommands[m.slice(prefix.length).split(' ')[0]](message, args)		
+	} else
+
+	if (joinableRoleCommands.hasOwnProperty(m.slice(prefix.length).split(' ')[0])) {
+		message.channel.send("Not doing these commands for now.")//joinableRoleCommands[m.slice(prefix.length).split(' ')[0]](message, argsStringResult)
 	} else
     /*
  
-    if (message.content.toLowerCase().startsWith(prefix + 'lock') && (hasRole(message.member, modID))) {
+    if (m.startsWith(prefix + 'lock') && (hasRole(message.member, modID))) {
         raid = !raid;
         if (raid) {
             client.guilds.get(guildID).defaultRole.setPermissions(0x00000000)
@@ -321,40 +461,8 @@ client.on('message', message => {
             client.channels.get(manualApprovalChannelID).send(`Raid mode off.`);
         }
     } else */
-	/*
-
-    if (message.content.startsWith(prefix + 'joinablerole') && (hasRole(message.member, adminID))) {
-        if (!argsStringResult) return;
-        if (mongodatabase.joinableRoles.contains(argsStringResult)) {
-			mongodatabase.joinableRoles.remove(argsStringResult);
-			message.channel.send(`${argsStringResult} has gone from joinable to no longer joinable.`);
-        } else if (argsStringResult is a real role) {
-			mongodatabase.joinableRoles.add(argsStringResult);
-			message.channel.send(`${argsStringResult} is now joinable. Type ${message.content} again to undo.`);
-		}
-    } else
  
-    if (message.content.startsWith(prefix + 'joinrole') && (isJoinable(argsStringResult))) {
-        if (!argsStringResult) return;
-		if (mongodatabase.joinableRoles.contains(argsStringResult)) {
-			message.member.addRole(argsStringResult);
-			message.channel.send(`Success! You now have the role ${argsStringResult}.`);
-		} else {
-			message.channel.send(`${argsStringResult} is not joinable.`);
-		}
-    } else
- 
-    if (message.content.startsWith(prefix + 'leaverole') && (isJoinable(argsStringResult))) {
-        if (!argsStringResult) return;
-		if (mongodatabase.joinableRoles.contains(argsStringResult)) {
-			message.member.removeRole(argsStringResult);
-			message.channel.send(`Success! You no longer have the role ${argsStringResult}.`);
-		} else {
-			message.channel.send(`${argsStringResult} is not joinable.`);
-		}
-    } else */
- 
-    if (message.content.startsWith(prefix + 'delete') && (hasRole(message.member, adminID))) {
+    if (m.startsWith(prefix + 'delete') && (hasRole(message.member, adminID))) {
         deleteTheMessages(message, args[0]);
     }
 });
