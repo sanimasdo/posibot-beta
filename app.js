@@ -72,11 +72,11 @@ const musicCommands = {
 					} else {
 						msg.channel.send('skipped').then(() => {dispatcher.end();});
 					}
-				} else if (m.content.startsWith('volume+')){
+				} else if (m.content.startsWith(prefix + 'volume+')){
 					if (Math.round(dispatcher.volume*50) >= 100) return msg.channel.send(`Volume: ${Math.round(dispatcher.volume*50)}%`);
 					dispatcher.setVolume(Math.min((dispatcher.volume*50 + (2*(m.content.split('+').length-1)))/50,2));
 					msg.channel.send(`Volume: ${Math.round(dispatcher.volume*50)}%`);
-				} else if (m.content.startsWith('volume-')){
+				} else if (m.content.startsWith(prefix + 'volume-')){
 					if (Math.round(dispatcher.volume*50) <= 0) return msg.channel.send(`Volume: ${Math.round(dispatcher.volume*50)}%`);
 					dispatcher.setVolume(Math.max((dispatcher.volume*50 - (2*(m.content.split('-').length-1)))/50,0));
 					msg.channel.send(`Volume: ${Math.round(dispatcher.volume*50)}%`);
@@ -138,8 +138,8 @@ const musicCommands = {
 		prefix + 'pause : "pauses the music"',	prefix + 'resume : "resumes the music"',
 		prefix + 'skip : "skips the playing song"',
 		prefix + 'time : "Shows the playtime of the song."',
-		'volume+(+++) : "increases volume by 2%/+"',
-		'volume-(---) : "decreases volume by 2%/-"',	'```'];
+		prefix + 'volume+(+++) : "increases volume by 2%/+"',
+		prefix + 'volume-(---) : "decreases volume by 2%/-"',	'```'];
 		msg.channel.send(tosend.join('\n'));
 	},
 	'reboot': (msg) => {
