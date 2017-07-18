@@ -1,3 +1,4 @@
+//2017-07-16T21:24:47.082246+00:00 app[worker.1]: TypeError: Cannot read property 'roles' of null
 const Discord = require("discord.js");
 const client = new Discord.Client();
 const randomInt = require('random-int');
@@ -358,7 +359,7 @@ client.on('roleDelete', (role) => {
  
 client.on('guildMemberAdd', member => {
     let guild = member.guild;
-    client.channels.get(joinleaveChannelID).send(`++${member.user.username} has joined the server`);
+    client.channels.get(joinleaveChannelID).send(`++${member.user} has joined the server`);
     client.channels.get(newcomerChannelID).send(`Hi ${member.user},\nWelcome to Positivity Hypno! Please start with these tips:
 	1. read ${client.channels.get(welcomeAndRulesChannelID)}
 	2. check out our website: https://www.positivityhypno.com/about/
@@ -396,7 +397,7 @@ client.on('message', message => {
     if ((m.includes(prefix + 'donebeingnew')) && (message.channel.id == newcomerChannelID)) {
         message.delete();
         if ((!hasRole(message.member, readyID)) && (!hasRole(message.member, trustedID)) && (!hasRole(message.member, SFWID))) {
-            client.channels.get(manualApprovalChannelID).send(`${message.member.user} has read the rules.`);
+            client.channels.get(joinleaveChannelID).send(`${message.member.user} has read the rules.`);
             message.member.addRole(readyID);
         }
     } else
