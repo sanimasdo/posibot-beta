@@ -172,6 +172,11 @@ const rpCommands = {
 			message.channel.send(randomRape[pick]);
 		}
 	},
+	'roundhouse': (message, args) => {
+		if (isMention(args[0])) {
+			message.channel.send(`*Roundhouses ${mentiontorawName(args[0])}, Right in the noggin!*`);
+		}
+	},
 	'doot': (message, args) => {
 		if (isMention(args[0])) {
 			message.channel.send(`*doots her trumpet at ${mentiontorawName(args[0])}!*`);
@@ -187,9 +192,12 @@ const rpCommands = {
         var pick = randomInt(random8ball.length - 1);
         message.channel.send(random8ball[pick]);
 	},
-	'roundhouse': (message, args) => {
-		if (isMention(args[0])) {
-			message.channel.send(`*Roundhouses ${mentiontorawName(args[0])}, Right in the noggin!*`);
+	'dice': (message, args) => {
+		if ((parseInt(args[0]) != NaN) && (parseInt(args[0]) < 101) && (parseInt(args[0]) > 0)) {
+			var pick = randomInt(args[0] - 1);
+			message.channel.send(`I rolled a ${args[0]}-sided die and got ${pick + 1}!`);
+		} else {
+			message.channel.send('Please use a number from 1 to 100.');
 		}
 	},
 	'rphelp': (message) => {
@@ -197,7 +205,8 @@ const rpCommands = {
 		prefix + 'bap : "Bap \'em!."',
 		prefix + 'slap : "Slap \'em!"',
 		prefix + '8ball : "I will tell the future for you."',
-		prefix + 'doot : "I will play my trumpet."',	'```'];
+		prefix + 'doot : "I will play my trumpet."',	
+		prefix + 'dice <number> : "Roll a die. Use a number from 1 to 100"','```'];
 		message.channel.send(tosend.join('\n'));
 	}
 };
