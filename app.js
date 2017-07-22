@@ -436,7 +436,7 @@ client.on('message', message => {
 	}
 
 	if (musicCommands.hasOwnProperty(m.slice(prefix.length).split(' ')[0])) {
-		musicCommands[m.slice(prefix.length).split(' ')[0]](message)
+		message.channel.send("Not doing music commands for now.")//musicCommands[m.slice(prefix.length).split(' ')[0]](message)
 	} else
 
 	if (rpCommands.hasOwnProperty(m.slice(prefix.length).split(' ')[0])) {
@@ -444,7 +444,7 @@ client.on('message', message => {
 	} else
 
 	if (joinableRoleCommands.hasOwnProperty(m.slice(prefix.length).split(' ')[0])) {
-		message.channel.send("Not doing these commands for now.")//joinableRoleCommands[m.slice(prefix.length).split(' ')[0]](message, argsStringResult)
+		message.channel.send("Not doing joinable role commands for now.")//joinableRoleCommands[m.slice(prefix.length).split(' ')[0]](message, argsStringResult)
 	} else
     /*
  
