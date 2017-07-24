@@ -492,12 +492,8 @@ client.on('message', message => {
             client.channels.get(manualApprovalChannelID).send(`Raid mode off.`);
         }
     } else */
- 
-    if (m.startsWith(prefix + 'delete') && (hasRole(message.member, adminID))) {
-        deleteTheMessages(message, args[0]);
-    } else
 	/*
-	if (m.startsWith(prefix + 'yee')) {
+ 	if (m.startsWith(prefix + 'yee')) {
 		const voiceChannel = message.member.voiceChannel;
 		if (!voiceChannel) return message.reply("Please be in a voice channel first!");
 		if (client.guilds.get(guildID).voiceConnection) return;
@@ -507,7 +503,12 @@ client.on('message', message => {
 				const dispatcher = connnection.playStream(stream);
 			dispatcher.on('end', () => voiceChannel.leave());
 		});
-	}*/
+	} else */
+
+    if (m.startsWith(prefix + 'delete') && (hasRole(message.member, adminID))) {
+        deleteTheMessages(message, args[0]);
+    } 
+
 });
  
 client.login(process.env.BOT_TOKEN);
