@@ -1,11 +1,20 @@
-//2017-07-16T21:24:47.082246+00:00 app[worker.1]: TypeError: Cannot read property 'roles' of null
 const Discord = require("discord.js");
 const client = new Discord.Client();
 const randomInt = require('random-int');
 const yt = require('ytdl-core');
 const fs = require("fs");
-let joinableroles = JSON.parse(fs.readFileSync("./joinableroles.json", "utf8"))[process.env.WHICH_LIST];
- 
+var MongoClient = require('mongodb').MongoClient;
+var url = process.env.MONGO_URL;
+
+MongoClient.connect(url, function(err, db) {
+  if (err) throw err;
+  db.createCollection("joinableroles", function(err, res) {
+    if (err) throw err;
+    console.log("Table created!");
+    db.close();
+  });
+}); 
+
 const guildID = process.env.ID_GUILD;
  
 const newID = process.env.ID_ROLE_NEW;
@@ -32,7 +41,6 @@ var raid = false;
 var switched = false;
  
 client.on('ready', () => {
-	console.log(joinableroles);
     console.log(readylog);
     client.user.setGame("hypnosis files");
 });
@@ -311,32 +319,46 @@ function deleteTheMessages(message, number) {
         message.channel.fetchMessages({limit: msg}).then(messages => message.channel.bulkDelete(messages)).catch(console.error);
 }
 
-function isJoinable(role) {
-    return (joinableroles.indexOf(role) > -1);
+function isJoinable(rolename) {
+    MongoClient.connect(url, function(err, db) {
+		if (err) throw err;
+		console.log("querying for "+ rolename);
+		var query = {name: rolename};
+		db.collection("joinableroles").find(query).toArray(function(err, result) {
+			if (err) throw err;
+			console.log(result);
+			if (result.length == 1) {
+				return callback(null, true);
+			} else {
+				return callback(null, false);
+			}
+			db.close();
+		});
+	});
 }
  
-function addJoinable(role) {
-    joinableroles.push(role);
-	var fullfile = JSON.parse(fs.readFileSync("./joinableroles.json", "utf8"));
-	fullfile[process.env.WHICH_LIST] = joinableroles;
-
-    fs.writeFile("./joinableroles.json", JSON.stringify(fullfile), (err) => {
-        if (err) console.error(err)
-    });
+function addJoinable(rolename) {
+	MongoClient.connect(url, function(err, db) {
+		if (err) throw err;
+		var myobj = {name: rolename};
+		db.collection("joinableroles").insertOne(myobj, function(err, res) {
+			if (err) throw err;
+			console.log("1 record inserted: " + rolename);
+			db.close();
+		});
+	}); 
 }
  
-function removeJoinable(role) {
-    if (joinableroles == []) return;
-    var index = joinableroles.indexOf(role);
-    if (index > -1) {
-        joinableroles.splice(index, 1);
-		var fullfile = JSON.parse(fs.readFileSync("./joinableroles.json", "utf8"));
-		fullfile[process.env.WHICH_LIST] = joinableroles;
-
-        fs.writeFile("./joinableroles.json", JSON.stringify(fullfile), (err) => {
-            if (err) console.error(err)
-        });
-    }
+function removeJoinable(rolename) {
+	MongoClient.connect(url, function(err, db) {
+		if (err) throw err;
+		var myquery = {name: rolename};
+		db.collection("customers").deleteOne(myquery, function(err, obj) {
+			if (err) throw err;
+			console.log("1 document deleted");
+			db.close();
+		});
+	}); 
 }
  
 client.on('guildMemberUpdate', (oldMember, newMember) => {
@@ -367,12 +389,11 @@ client.on('roleDelete', (role) => {
 //Guild events
  
 client.on('guildMemberAdd', member => {
-    let guild = member.guild;
     client.channels.get(joinleaveChannelID).send(`++${member.user} has joined the server`);
     client.channels.get(newcomerChannelID).send(`Hi ${member.user},\nWelcome to Positivity Hypno! Please start with these tips:
-	1. read ${client.channels.get(welcomeAndRulesChannelID)}
-	2. check out our website: https://www.positivityhypno.com/about/
-	3. head to ${client.channels.get(worksafeGeneralChannelID)} or ${client.channels.get(nsfwGeneralChannelID)} and say hi!`);
+	1.  Read ${client.channels.get(welcomeAndRulesChannelID)}
+	2. Check out our website: https://www.positivityhypno.com/about/
+	3. Head to ${client.channels.get(worksafeGeneralChannelID)} or ${client.channels.get(nsfwGeneralChannelID)} and say hi!`);
 });
  
 client.on('guildMemberRemove', member => {
@@ -444,16 +465,16 @@ client.on('message', message => {
 		return;
 	}
 
-	if (musicCommands.hasOwnProperty(m.slice(prefix.length).split(' ')[0])) {
+	if (musicCommands.hasOwnProperty(m.slice(prefix.length).split(' ')[0]) && (m.startsWith(prefix))) {
 		message.channel.send("Not doing music commands for now.")//musicCommands[m.slice(prefix.length).split(' ')[0]](message)
 	} else
 
-	if (rpCommands.hasOwnProperty(m.slice(prefix.length).split(' ')[0])) {
+	if (rpCommands.hasOwnProperty(m.slice(prefix.length).split(' ')[0]) && (m.startsWith(prefix))) {
 		rpCommands[m.slice(prefix.length).split(' ')[0]](message, args)		
 	} else
 
-	if (joinableRoleCommands.hasOwnProperty(m.slice(prefix.length).split(' ')[0])) {
-		message.channel.send("Not doing joinable role commands for now.")//joinableRoleCommands[m.slice(prefix.length).split(' ')[0]](message, argsStringResult)
+	if (joinableRoleCommands.hasOwnProperty(m.slice(prefix.length).split(' ')[0]) && (m.startsWith(prefix))) {
+		message.channel.send("Not doing joinable role commands for now.");//joinableRoleCommands[m.slice(prefix.length).split(' ')[0]](message, argsStringResult)
 	} else
     /*
  

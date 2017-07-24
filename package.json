@@ -15,6 +15,7 @@
   "dependencies": {
     "discord.js": "^11.1.0",
     "foreman": "^2.0.0",
+    "mongodb": "^2.2.30",
     "node-opus": "^0.2.6",
     "nodemon": "^1.11.0",
     "random-int": "^1.0.0",
