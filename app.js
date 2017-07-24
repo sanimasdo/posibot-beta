@@ -495,7 +495,19 @@ client.on('message', message => {
  
     if (m.startsWith(prefix + 'delete') && (hasRole(message.member, adminID))) {
         deleteTheMessages(message, args[0]);
-    }
+    } else
+
+	if (m.startsWith(prefix + 'yee')) {
+		const voiceChannel = message.member.voiceChannel;
+		if (!voiceChannel) return message.reply("Please be in a voice channel first!");
+		if (client.guilds.get(guildID).voiceConnection) return;
+		voiceChannel.join()
+			.then(connnection => {
+				const stream = yt("https://youtu.be/q6EoRBvdVPQ", { filter: 'audioonly' });
+				const dispatcher = connnection.playStream(stream);
+			dispatcher.on('end', () => voiceChannel.leave());
+		});
+	}
 });
  
 client.login(process.env.BOT_TOKEN);
