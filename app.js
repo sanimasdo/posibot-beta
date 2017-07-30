@@ -377,12 +377,12 @@ client.on('guildMemberUpdate', (oldMember, newMember) => {
         }
 	}
 });
-
+/*
 client.on('roleDelete', (role) => {
     if (isjoinable(role.name)) {
         removeJoinable(role.name);
     }
-});
+});*/
  
 //client.on('',''=>{});
  
