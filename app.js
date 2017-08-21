@@ -389,7 +389,7 @@ client.on('roleDelete', (role) => {
 //Guild events
  
 client.on('guildMemberAdd', member => {
-    client.channels.get(joinleaveChannelID).send(`++${member.user} has joined the server`);
+    client.channels.get(joinleaveChannelID).send(`+ + ${member.user} has joined ${member.guild.name}.`);
     client.channels.get(newcomerChannelID).send(`Hi ${member.user},\nWelcome to Positivity Hypno! Please start with these tips:
 	1.  Read ${client.channels.get(welcomeAndRulesChannelID)}
 	2. Check out our website: https://www.positivityhypno.com/about/
@@ -397,7 +397,7 @@ client.on('guildMemberAdd', member => {
 });
  
 client.on('guildMemberRemove', member => {
-    client.channels.get(joinleaveChannelID).send(`--${member.user.username} has left the server`);
+    client.channels.get(joinleaveChannelID).send(`- - ${member.user.username} has left ${member.guild.name}.`);
 });
 /*
 client.on('guildBanAdd', (guild, user) => {
