@@ -393,7 +393,7 @@ client.on('guildMemberAdd', member => {
     client.channels.get(newcomerChannelID).send(`Hi ${member.user},\nWelcome to Positivity Hypno! Please start with these tips:
 	1.  Read ${client.channels.get(welcomeAndRulesChannelID)}
 	2. Check out our website: https://www.positivityhypno.com/about/
-	3. Head to ${client.channels.get(worksafeGeneralChannelID)} or ${client.channels.get(nsfwGeneralChannelID)} and say hi!`);
+	3. Head to ${client.channels.get(worksafeGeneralChannelID)} and say hi!`);
 });
  
 client.on('guildMemberRemove', member => {
