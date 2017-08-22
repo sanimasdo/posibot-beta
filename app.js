@@ -15,7 +15,17 @@ MongoClient.connect(url, function(err, db) {
   });
 }); 
 
-const guildID = process.env.ID_GUILD;
+const hypnoGuildID = process.env.ID_GUILD;
+const tulpaGuildID = "342114520468160515";
+const petplayGuildID = "342117220245307392";
+const PosiPosiGuildID = "346295740945006594";
+const mindscapeGuildID = "342114067093258240";
+const supportGuildID = "339130422699229195";
+const dpgGuildID = "315961954814525440";
+const mshGuildID = "214708520468086784";
+const BypnoGuildID = "316719661116817418";
+
+const pbotServers = [hypnoGuildID, supportGuildID, BypnoGuildID];
  
 const newID = process.env.ID_ROLE_NEW;
 const readyID = process.env.ID_ROLE_READY;
@@ -47,9 +57,9 @@ client.on('ready', () => {
 
 
 let queue = {};
-queue[guildID] = {};
-queue[guildID].playing = false;
-queue[guildID].songs = [];
+queue[hypnoGuildID] = {};
+queue[hypnoGuildID].playing = false;
+queue[hypnoGuildID].songs = [];
 
 const musicCommands = {
 	'play': (msg) => {
@@ -129,11 +139,11 @@ const musicCommands = {
 		msg.channel.send(`__**${msg.guild.name}'s Music Queue:**__ Currently **${tosend.length}** songs queued ${(tosend.length > 15 ? '*[Only next 15 shown]*' : '')}\n\`\`\`${tosend.slice(0,15).join('\n')}\`\`\``);
 	},
 	'hypnoqueue': (msg) => {
-		queue[guildID].songs.push({url: 'https://www.youtube.com/watch?v=JO98V-w4ghM', title: '2017-05-14 Transformation Session 1', requester: 'PosiBot'});
-		queue[guildID].songs.push({url: 'https://www.youtube.com/watch?v=tsiEoiwYZQQ', title: '2017-05-17 Transformation Session 2', requester: 'PosiBot'});
-		queue[guildID].songs.push({url: 'https://www.youtube.com/watch?v=CULTVCodw1k', title: '2017-05-23 Lucid dreaming session 1', requester: 'PosiBot'});
-		queue[guildID].songs.push({url: 'https://www.youtube.com/watch?v=2NEKTBawiVs', title: '2017-05-30 Anxiety reduction session 1', requester: 'PosiBot'});
-		queue[guildID].songs.push({url: 'https://www.youtube.com/watch?v=U69aeFgcpWg', title: '2017-05-31 Imposition session 1', requester: 'PosiBot'});
+		queue[hypnoGuildID].songs.push({url: 'https://www.youtube.com/watch?v=JO98V-w4ghM', title: '2017-05-14 Transformation Session 1', requester: 'PosiBot'});
+		queue[hypnoGuildID].songs.push({url: 'https://www.youtube.com/watch?v=tsiEoiwYZQQ', title: '2017-05-17 Transformation Session 2', requester: 'PosiBot'});
+		queue[hypnoGuildID].songs.push({url: 'https://www.youtube.com/watch?v=CULTVCodw1k', title: '2017-05-23 Lucid dreaming session 1', requester: 'PosiBot'});
+		queue[hypnoGuildID].songs.push({url: 'https://www.youtube.com/watch?v=2NEKTBawiVs', title: '2017-05-30 Anxiety reduction session 1', requester: 'PosiBot'});
+		queue[hypnoGuildID].songs.push({url: 'https://www.youtube.com/watch?v=U69aeFgcpWg', title: '2017-05-31 Imposition session 1', requester: 'PosiBot'});
 		msg.channel.send(`added **some recorded live hypno sessions** to the queue`);
 	},
 	'musichelp': (msg) => {
@@ -309,13 +319,13 @@ function hasRole(member, role) {
 function isMention(arg) {
 	if (arg == null) return false;
     var res = arg.replace(/</g, "").replace(/@/g, "").replace(/>/g, "").replace(/!/g, "");
-    return client.guilds.get(guildID).members.find("id", res);
+    return client.guilds.get(hypnoGuildID).members.find("id", res);
 }
  
 //rawName being Nickname if there is one, otherwise username
 function mentiontorawName(arg) {
     var res = arg.replace(/</g, "").replace(/@/g, "").replace(/>/g, "").replace(/!/g, "");
-	var theMember = client.guilds.get(guildID).members.find("id", res);
+	var theMember = client.guilds.get(hypnoGuildID).members.find("id", res);
 
     if (theMember.nickname == null) {
         return theMember.user.username;
@@ -377,7 +387,7 @@ function removeJoinable(rolename) {
 }
  
 client.on('guildMemberUpdate', (oldMember, newMember) => {
-	if (newMember.guild != client.guilds.get(guildID)) return;
+	if (newMember.guild != client.guilds.get(hypnoGuildID)) return;
     if (!hasRole(oldMember, trustedID) && (hasRole(newMember, trustedID))) { //If we added the "Trusted" role to them
         if (hasRole(newMember, readyID)) {
             newMember.removeRole(readyID);
@@ -405,8 +415,8 @@ client.on('roleDelete', (role) => {
 //Guild events
  
 client.on('guildMemberAdd', member => {
-    client.channels.get(joinleaveChannelID).send(`+ + ${member.user} has joined ${member.guild.name}.`);
-	if (member.guild != client.guilds.get(guildID)) return;
+    client.channels.get(joinleaveChannelID).send(`+ + ${member.guild.name}: ${member.user} has joined.`);
+	if (member.guild != client.guilds.get(hypnoGuildID)) return;
     client.channels.get(newcomerChannelID).send(`Hi ${member.user},\nWelcome to ${member.guild.name}! Please start with these tips:
 	1.  Read ${client.channels.get(welcomeAndRulesChannelID)}
 	2. Check out our website: https://www.positivityhypno.com/about/
@@ -414,15 +424,25 @@ client.on('guildMemberAdd', member => {
 });
  
 client.on('guildMemberRemove', member => {
-    client.channels.get(joinleaveChannelID).send(`- - ${member.user.username} has left ${member.guild.name}.`);
+    client.channels.get(joinleaveChannelID).send(`- - ${member.guild.name}: ${member.user.username} has left.`);
 });
 
 client.on('guildBanAdd', (guild, user) => {
-    client.channels.get(joinleaveChannelID).send(`${user.username} has been banned from ${guild.name}.`);
+    client.channels.get(joinleaveChannelID).send(`${guild.name} bans ${user.username}.`);
+	for (var ID in pbotServers) {
+		if (ID != guild.id) {
+			client.guilds.get(ID).ban(user);
+		}
+	}
 });
  
 client.on('guildBanRemove', (guild, user) => {
-    client.channels.get(joinleaveChannelID).send(`${user.username} has been unbanned from ${guild.name}.`);
+    client.channels.get(joinleaveChannelID).send(`${guild.name} revokes the ban of ${user.username}.`);
+	for (var ID in pbotServers) {
+		if (ID != guild.id) {
+			client.guilds.get(ID).unban(user);
+		}
+	}
 });
  
 //Channel events
@@ -430,7 +450,7 @@ client.on('guildBanRemove', (guild, user) => {
 //Message events (chat commands)
  
 client.on('message', message => {
-	if (message.member.guild != client.guilds.get(guildID)) return;
+	if (message.member.guild != client.guilds.get(hypnoGuildID)) return;
     if (message.author.bot) return; //to prevent a loop where the bot endlessley triggers itself to message
     if (message.channel.type === 'dm') { //to prevent DMs from doing shiieet to the bot
         console.log(message.author.username + ": " + message.content);
@@ -499,12 +519,12 @@ client.on('message', message => {
     if (m.startsWith(prefix + 'lock') && (hasRole(message.member, modID))) {
         raid = !raid;
         if (raid) {
-            client.guilds.get(guildID).defaultRole.setPermissions(0x00000000)
+            client.guilds.get(hypnoGuildID).defaultRole.setPermissions(0x00000000)
              .then(r => console.log(`Role updated ${r}`))
              .catch(console.error);
             client.channels.get(manualApprovalChannelID).send(`Raid mode on. All "New" members may only type in ${client.channels.get(welcomeAndRulesChannelID)}`);
         } else { //['READ_MESSAGES'] 0x00000400
-            client.guilds.get(guildID).defaultRole.setPermissions(['READ_MESSAGES'])
+            client.guilds.get(hypnoGuildID).defaultRole.setPermissions(['READ_MESSAGES'])
              .then(r => console.log(`Role updated ${r}`))
              .catch(console.error);
             client.channels.get(manualApprovalChannelID).send(`Raid mode off.`);
@@ -514,7 +534,7 @@ client.on('message', message => {
  	if (m.startsWith(prefix + 'yee')) {
 		const voiceChannel = message.member.voiceChannel;
 		if (!voiceChannel) return message.reply("Please be in a voice channel first!");
-		if (client.guilds.get(guildID).voiceConnection) return;
+		if (client.guilds.get(hypnoGuildID).voiceConnection) return;
 		voiceChannel.join()
 			.then(connnection => {
 				const stream = yt("https://youtu.be/q6EoRBvdVPQ", { filter: 'audioonly' });
