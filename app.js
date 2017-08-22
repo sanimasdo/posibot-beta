@@ -167,6 +167,21 @@ const rpCommands = {
 			message.channel.send(`*baps ${mentiontorawName(args[0])}*`);
 		}
 	},
+	'hug': (message, args) => {
+		if (isMention(args[0])) {
+			message.channel.send(`*hugs ${mentiontorawName(args[0])}*`);
+		}
+	},
+	'snuggle': (message, args) => {
+		if (isMention(args[0])) {
+			message.channel.send(`*snuggles ${mentiontorawName(args[0])}*`);
+		}
+	},
+	'jape': (message, args) => {
+		if (isMention(args[0])) {
+			message.channel.send(`*Pulls the wool over ${mentiontorawName(args[0])}'s eyes*`);
+		}
+	},
 	'slap': (message, args) => {
 		if (isMention(args[0])) {
 			message.channel.send(`*slaps ${mentiontorawName(args[0])}*`);
