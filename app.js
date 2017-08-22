@@ -377,6 +377,7 @@ function removeJoinable(rolename) {
 }
  
 client.on('guildMemberUpdate', (oldMember, newMember) => {
+	if (newMember.guild != client.guilds.get(guildID)) return;
     if (!hasRole(oldMember, trustedID) && (hasRole(newMember, trustedID))) { //If we added the "Trusted" role to them
         if (hasRole(newMember, readyID)) {
             newMember.removeRole(readyID);
@@ -405,6 +406,7 @@ client.on('roleDelete', (role) => {
  
 client.on('guildMemberAdd', member => {
     client.channels.get(joinleaveChannelID).send(`+ + ${member.user} has joined ${member.guild.name}.`);
+	if (member.guild != client.guilds.get(guildID)) return;
     client.channels.get(newcomerChannelID).send(`Hi ${member.user},\nWelcome to ${member.guild.name}! Please start with these tips:
 	1.  Read ${client.channels.get(welcomeAndRulesChannelID)}
 	2. Check out our website: https://www.positivityhypno.com/about/
@@ -428,6 +430,7 @@ client.on('guildBanRemove', (guild, user) => {
 //Message events (chat commands)
  
 client.on('message', message => {
+	if (message.member.guild != client.guilds.get(guildID)) return;
     if (message.author.bot) return; //to prevent a loop where the bot endlessley triggers itself to message
     if (message.channel.type === 'dm') { //to prevent DMs from doing shiieet to the bot
         console.log(message.author.username + ": " + message.content);
