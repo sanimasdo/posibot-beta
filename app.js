@@ -429,20 +429,20 @@ client.on('guildMemberRemove', member => {
 
 client.on('guildBanAdd', (guild, user) => {
     client.channels.get(joinleaveChannelID).send(`${guild.name} bans ${user.username}.`);
-	for (var ID in pbotServers) {
+	/*for (var ID in pbotServers) {
 		if (ID != guild.id) {
 			client.guilds.get(ID).ban(user);
 		}
-	}
+	}*/
 });
  
 client.on('guildBanRemove', (guild, user) => {
     client.channels.get(joinleaveChannelID).send(`${guild.name} revokes the ban of ${user.username}.`);
-	for (var ID in pbotServers) {
+	/*for (var ID in pbotServers) {
 		if (ID != guild.id) {
 			client.guilds.get(ID).unban(user);
 		}
-	}
+	}*/
 });
  
 //Channel events
