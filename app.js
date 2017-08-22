@@ -405,7 +405,7 @@ client.on('roleDelete', (role) => {
  
 client.on('guildMemberAdd', member => {
     client.channels.get(joinleaveChannelID).send(`+ + ${member.user} has joined ${member.guild.name}.`);
-    client.channels.get(newcomerChannelID).send(`Hi ${member.user},\nWelcome to Positivity Hypno! Please start with these tips:
+    client.channels.get(newcomerChannelID).send(`Hi ${member.user},\nWelcome to ${member.guild.name}! Please start with these tips:
 	1.  Read ${client.channels.get(welcomeAndRulesChannelID)}
 	2. Check out our website: https://www.positivityhypno.com/about/
 	3. Head to ${client.channels.get(worksafeGeneralChannelID)} and say hi!`);
@@ -414,14 +414,14 @@ client.on('guildMemberAdd', member => {
 client.on('guildMemberRemove', member => {
     client.channels.get(joinleaveChannelID).send(`- - ${member.user.username} has left ${member.guild.name}.`);
 });
-/*
+
 client.on('guildBanAdd', (guild, user) => {
-    client.channels.get(joinleaveChannelID).send(`${user.username} has been banned`);
+    client.channels.get(joinleaveChannelID).send(`${user.username} has been banned from ${guild.name}.`);
 });
  
 client.on('guildBanRemove', (guild, user) => {
-    client.channels.get(joinleaveChannelID).send(`${user.username} has been unbanned`);
-});*/
+    client.channels.get(joinleaveChannelID).send(`${user.username} has been unbanned from ${guild.name}.`);
+});
  
 //Channel events
  
