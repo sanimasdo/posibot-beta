@@ -25,7 +25,7 @@ const dpgGuildID = "315961954814525440";
 const mshGuildID = "214708520468086784";
 const BypnoGuildID = "316719661116817418";
 
-const pbotServers = [hypnoGuildID, supportGuildID, BypnoGuildID];
+const pbotServers = [supportGuildID, BypnoGuildID, hypnoGuildID];
  
 const newID = process.env.ID_ROLE_NEW;
 const readyID = process.env.ID_ROLE_READY;
@@ -51,6 +51,9 @@ var raid = false;
 var switched = false;
  
 client.on('ready', () => {
+	console.log(client.guilds.keys());
+	var keys = Object.keys(client.guilds);
+	console.log(keys);
     console.log(readylog);
     client.user.setGame("hypnosis files");
 });
@@ -429,20 +432,28 @@ client.on('guildMemberRemove', member => {
 
 client.on('guildBanAdd', (guild, user) => {
     client.channels.get(joinleaveChannelID).send(`${guild.name} bans ${user.username}.`);
-	/*for (var ID in pbotServers) {
-		if (ID != guild.id) {
-			client.guilds.get(ID).ban(user);
+	if (hypnoGuildID == BypnoGuildID) {
+		console.log(pbotServers);
+		for (var i = 0; i < pbotServers.length; i++) {
+			console.log(pbotServers[i]);
+			if (pbotServers[i] != guild.id) {
+				client.guilds.get(pbotServers[i]).ban(user);
+			}
 		}
-	}*/
+	}
 });
  
 client.on('guildBanRemove', (guild, user) => {
     client.channels.get(joinleaveChannelID).send(`${guild.name} revokes the ban of ${user.username}.`);
-	/*for (var ID in pbotServers) {
-		if (ID != guild.id) {
-			client.guilds.get(ID).unban(user);
+	if (hypnoGuildID == BypnoGuildID) {
+		console.log(pbotServers);
+		for (var i = 0; i < pbotServers.length; i++) {
+			console.log(pbotServers[i]);
+			if (pbotServers[i] != guild.id) {
+				client.guilds.get(pbotServers[i]).unban(user);
+			}
 		}
-	}*/
+	}
 });
  
 //Channel events
@@ -450,6 +461,7 @@ client.on('guildBanRemove', (guild, user) => {
 //Message events (chat commands)
  
 client.on('message', message => {
+	console.log("message: " + message.content);
 	if (message.member.guild != client.guilds.get(hypnoGuildID)) return;
     if (message.author.bot) return; //to prevent a loop where the bot endlessley triggers itself to message
     if (message.channel.type === 'dm') { //to prevent DMs from doing shiieet to the bot
