@@ -462,12 +462,13 @@ client.on('guildBanRemove', (guild, user) => {
  
 client.on('message', message => {
 	console.log("message: " + message.content);
-	if (message.member.guild != client.guilds.get(hypnoGuildID)) return;
+
     if (message.author.bot) return; //to prevent a loop where the bot endlessley triggers itself to message
     if (message.channel.type === 'dm') { //to prevent DMs from doing shiieet to the bot
         console.log(message.author.username + ": " + message.content);
         return;
     }
+	if (message.member.guild != client.guilds.get(hypnoGuildID)) return;
     if ((raid) && (hasRole(message.member, newID)) && (!(message.channel.id == newcomerChannelID))) message.delete(); //deletes raider messages
    
     let args = message.content.split(' ').slice(1);
