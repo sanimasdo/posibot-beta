@@ -229,8 +229,14 @@ const rpCommands = {
         message.channel.send(random8ball[pick]);
 	},
 	'dice': (message, args) => {
-		if ((parseInt(args[0]) != NaN) && (parseInt(args[0]) < 101) && (parseInt(args[0]) > 0)) {
-			var pick = randomInt(args[0] - 1);
+		let failed = false;
+		if(!/^[0-9]+$/.test(args[0]))
+			message.channel.send('Please use a number from 1 to 100.');
+			return;
+		}
+		let n = parseInt(args[0]*1);
+		if ((n <= 100) && (n >= 1)) {
+			var pick = randomInt(n - 1);
 			message.channel.send(`I rolled a ${args[0]}-sided die and got ${pick + 1}!`);
 		} else {
 			message.channel.send('Please use a number from 1 to 100.');
