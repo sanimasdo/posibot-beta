@@ -13,7 +13,7 @@ MongoClient.connect(url, function(err, db) {
     console.log("Table created!");
     db.close();
   });
-}); 
+});
 
 const hypnoGuildID = process.env.ID_GUILD;
 const tulpaGuildID = "342114520468160515";
@@ -26,14 +26,14 @@ const mshGuildID = "214708520468086784";
 const BypnoGuildID = "316719661116817418";
 
 const pbotServers = [supportGuildID, BypnoGuildID, hypnoGuildID];
- 
+
 const newID = process.env.ID_ROLE_NEW;
 const readyID = process.env.ID_ROLE_READY;
 const SFWID = process.env.ID_ROLE_SFW;
 const trustedID = process.env.ID_ROLE_TRUSTED;
 const modID = process.env.ID_ROLE_MOD;
 const adminID = process.env.ID_ROLE_ADMIN;
- 
+
 const newcomerChannelID = process.env.ID_CHANNEL_NEWCOMERS;
 const joinleaveChannelID = process.env.ID_CHANNEL_JOINLEAVE;
 const manualApprovalChannelID = process.env.ID_CHANNEL_MANUALAPPROVAL;
@@ -46,10 +46,10 @@ const botChannelID = process.env.ID_CHANNEL_BOT;
 const readylog = process.env.READY_LOG;
 const prefix = process.env.PREFIX;
 var passes = 1;
- 
+
 var raid = false;
 var switched = false;
- 
+
 client.on('ready', () => {
 	console.log(client.guilds.keys());
 	var keys = Object.keys(client.guilds);
@@ -229,12 +229,11 @@ const rpCommands = {
         message.channel.send(random8ball[pick]);
 	},
 	'dice': (message, args) => {
-		let failed = false;
-		if(!/^[0-9]+$/.test(args[0]))
+		if(!/^[0-9]+$/.test(args[0])) {
 			message.channel.send('Please use a number from 1 to 100.');
 			return;
 		}
-		let n = parseInt(args[0]*1);
+		let n = parseInt(args[0]);
 		if ((n <= 100) && (n >= 1)) {
 			var pick = randomInt(n - 1);
 			message.channel.send(`I rolled a ${args[0]}-sided die and got ${pick + 1}!`);
@@ -247,7 +246,7 @@ const rpCommands = {
 		prefix + 'bap : "Bap \'em!."',
 		prefix + 'slap : "Slap \'em!"',
 		prefix + '8ball : "I will tell the future for you."',
-		prefix + 'doot : "I will play my trumpet."',	
+		prefix + 'doot : "I will play my trumpet."',
 		prefix + 'dice <number> : "Roll a die. Use a number from 1 to 100"','```'];
 		message.channel.send(tosend.join('\n'));
 	}
@@ -262,7 +261,7 @@ const joinableRoleCommands = {
             for (var i = 0; i < joinableroles.length; i++) {
                 roleString += joinableroles[i] + "\n";
             }
-            message.channel.send("The joinable roles are: \n**" + roleString + "**");           
+            message.channel.send("The joinable roles are: \n**" + roleString + "**");
         }
 	},
 	'jr': (message, argsStringResult) => {
@@ -271,7 +270,7 @@ const joinableRoleCommands = {
 			if (isJoinable(argsStringResult)) {
 				removeJoinable(argsStringResult);
 				message.channel.send(`${argsStringResult} is now no longer joinable. Type **${message.content}** again to undo.`);
- 
+
 			} else if (message.guild.roles.find("name", argsStringResult)) { // is a real role
 				if ((message.guild.roles.find("name", argsStringResult).id == adminID) || (message.guild.roles.find("name", argsStringResult).id == modID)) {
 					message.channel.send("What are you doing!!!");
@@ -282,7 +281,7 @@ const joinableRoleCommands = {
 			} else {
 				message.channel.send(`${argsStringResult} is not a real role!`);
 			}
-		}	
+		}
 	},
 	'iam': (message, argsStringResult) => {
 		if (!argsStringResult) return;
@@ -292,9 +291,9 @@ const joinableRoleCommands = {
                 message.channel.send(`You already have this role!`);
             } else {
                 message.member.addRole(theRole);
-                message.channel.send(`Success! You now have the role **${argsStringResult}!**`);       
+                message.channel.send(`Success! You now have the role **${argsStringResult}!**`);
             }
- 
+
         } else {
             message.channel.send(`${argsStringResult} is either not joinable or doesn't exist.`);
         }
@@ -305,7 +304,7 @@ const joinableRoleCommands = {
             var theRole = message.guild.roles.find("name", argsStringResult);
             message.member.removeRole(theRole);
             message.channel.send(`Success! You no longer have the role **${argsStringResult}.**`);
- 
+
         } else {
             message.channel.send(`${argsStringResult} is either not joinable or doesn't exist.`);
         }
@@ -320,17 +319,17 @@ const joinableRoleCommands = {
 		message.channel.send(tosend.join('\n'));
 	}
 };
- 
+
 function hasRole(member, role) {
     return member.roles.find("id", role);
 }
- 
+
 function isMention(arg) {
 	if (arg == null) return false;
     var res = arg.replace(/</g, "").replace(/@/g, "").replace(/>/g, "").replace(/!/g, "");
     return client.guilds.get(hypnoGuildID).members.find("id", res);
 }
- 
+
 //rawName being Nickname if there is one, otherwise username
 function mentiontorawName(arg) {
     var res = arg.replace(/</g, "").replace(/@/g, "").replace(/>/g, "").replace(/!/g, "");
@@ -342,7 +341,7 @@ function mentiontorawName(arg) {
         return theMember.nickname;
     }
 }
- 
+
 function deleteTheMessages(message, number) {
         var msg;
         if (isNaN(number) || (number < 2)) { //if PHdelete with no valid argument
@@ -370,7 +369,7 @@ function isJoinable(rolename) {
 		});
 	});
 }
- 
+
 function addJoinable(rolename) {
 	MongoClient.connect(url, function(err, db) {
 		if (err) throw err;
@@ -380,9 +379,9 @@ function addJoinable(rolename) {
 			console.log("1 record inserted: " + rolename);
 			db.close();
 		});
-	}); 
+	});
 }
- 
+
 function removeJoinable(rolename) {
 	MongoClient.connect(url, function(err, db) {
 		if (err) throw err;
@@ -392,9 +391,9 @@ function removeJoinable(rolename) {
 			console.log("1 document deleted");
 			db.close();
 		});
-	}); 
+	});
 }
- 
+
 client.on('guildMemberUpdate', (oldMember, newMember) => {
 	if (newMember.guild != client.guilds.get(hypnoGuildID)) return;
     if (!hasRole(oldMember, trustedID) && (hasRole(newMember, trustedID))) { //If we added the "Trusted" role to them
@@ -418,11 +417,11 @@ client.on('roleDelete', (role) => {
         removeJoinable(role.name);
     }
 });*/
- 
+
 //client.on('',''=>{});
- 
+
 //Guild events
- 
+
 client.on('guildMemberAdd', member => {
     client.channels.get(joinleaveChannelID).send(`+ + ${member.guild.name}: ${member.user} has joined.`);
 	if (member.guild != client.guilds.get(hypnoGuildID)) return;
@@ -431,7 +430,7 @@ client.on('guildMemberAdd', member => {
 	2. Check out our website: https://www.positivityhypno.com/about/
 	3. Head to ${client.channels.get(worksafeGeneralChannelID)} and say hi!`);
 });
- 
+
 client.on('guildMemberRemove', member => {
     client.channels.get(joinleaveChannelID).send(`- - ${member.guild.name}: ${member.user.username} has left.`);
 });
@@ -448,7 +447,7 @@ client.on('guildBanAdd', (guild, user) => {
 		}
 	}
 });
- 
+
 client.on('guildBanRemove', (guild, user) => {
     client.channels.get(joinleaveChannelID).send(`${guild.name} revokes the ban of ${user.username}.`);
 	if (hypnoGuildID == BypnoGuildID) {
@@ -461,11 +460,11 @@ client.on('guildBanRemove', (guild, user) => {
 		}
 	}
 });
- 
+
 //Channel events
- 
+
 //Message events (chat commands)
- 
+
 client.on('message', message => {
 	console.log("message: " + message.content);
 
@@ -476,11 +475,11 @@ client.on('message', message => {
     }
 	if (message.member.guild != client.guilds.get(hypnoGuildID)) return;
     if ((raid) && (hasRole(message.member, newID)) && (!(message.channel.id == newcomerChannelID))) message.delete(); //deletes raider messages
-   
+
     let args = message.content.split(' ').slice(1);
     var argsStringResult = args.join(' ');
 	var m = message.content.toLowerCase();
- 
+
     if ((m.includes(prefix + 'donebeingnew')) && (message.channel.id == newcomerChannelID)) {
         message.delete();
         if ((!hasRole(message.member, readyID)) && (!hasRole(message.member, trustedID)) && (!hasRole(message.member, SFWID))) {
@@ -493,7 +492,7 @@ client.on('message', message => {
         if (!argsStringResult) argsStringResult = 'hypnosis files';
         client.user.setGame(argsStringResult);
     } else
- 
+
     if (m.startsWith(prefix + 'setstatus') && (hasRole(message.member, adminID))) {
         if (!argsStringResult) argsStringResult = 'online';
         client.user.setStatus(argsStringResult);
@@ -510,7 +509,7 @@ client.on('message', message => {
 		(m.startsWith(prefix + 'queue')) || (m.startsWith(prefix + 'hypnoqueue')) ||
 		(m.startsWith(prefix + 'play')) || (m.startsWith(prefix + 'pause')) ||
 		(m.startsWith(prefix + 'resume')) || (m.startsWith(prefix + 'skip')) ||
-		(m.startsWith(prefix + 'time')) || (m.startsWith('volume'))) && 
+		(m.startsWith(prefix + 'time')) || (m.startsWith('volume'))) &&
 		(!(message.channel.id == botChannelID))) {
 		message.channel.send(`Keep music commands in ${client.channels.get(botChannelID)}.`);
 		return;
@@ -527,14 +526,14 @@ client.on('message', message => {
 	} else
 
 	if (rpCommands.hasOwnProperty(m.slice(prefix.length).split(' ')[0]) && (m.startsWith(prefix))) {
-		rpCommands[m.slice(prefix.length).split(' ')[0]](message, args)		
+		rpCommands[m.slice(prefix.length).split(' ')[0]](message, args)
 	} else
 
 	if (joinableRoleCommands.hasOwnProperty(m.slice(prefix.length).split(' ')[0]) && (m.startsWith(prefix))) {
 		message.channel.send("Not doing joinable role commands for now.");//joinableRoleCommands[m.slice(prefix.length).split(' ')[0]](message, argsStringResult)
 	} else
     /*
- 
+
     if (m.startsWith(prefix + 'lock') && (hasRole(message.member, modID))) {
         raid = !raid;
         if (raid) {
@@ -564,14 +563,13 @@ client.on('message', message => {
 
     if (m.startsWith(prefix + 'delete') && (hasRole(message.member, adminID))) {
         deleteTheMessages(message, args[0]);
-    } 
+    }
 
 });
- 
+
 client.login(process.env.BOT_TOKEN);
- 
+
 //https://discord.js.org/#/docs/main/stable/general/welcome
 //https://anidiotsguide.gitbooks.io/discord-js-bot-guide/video-guides/episode-01.html
 //https://docs.mongodb.com/getting-started/node/introduction/
 //https://discordapp.com/oauth2/authorize?client_id=326740767886278660&scope=bot&permissions=0
- 
