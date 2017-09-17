@@ -208,6 +208,14 @@ const rpCommands = {
 			message.channel.send(randomRape[pick]);
 		}
 	},
+	'pat': (message, args) => {
+        if (isMention(args[0])) {
+            var randomPat = [`*pats ${mentiontorawName(args[0])}'s head}*`,
+                        `*patpats ${mentiontorawName(args[0])}'s head*`];
+            var pick = randomInt(randomPat.length - 1);
+            message.channel.send(randomPat[pick]);
+        }
+    },
 	'roundhouse': (message, args) => {
 		if (isMention(args[0])) {
 			message.channel.send(`*Roundhouses ${mentiontorawName(args[0])}, Right in the noggin!*`);
