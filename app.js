@@ -200,6 +200,51 @@ const rpCommands = {
 			message.channel.send(`*slaps ${mentiontorawName(args[0])}*`);
 		}
 	},
+	'marry': (message, args) => {
+		if (isMention(args[0])) {
+			message.channel.send(`*Marries ${mentiontorawName(args[0])}, in health and sickness!*`);
+		}
+	},
+	'bite': (message, args) => {
+		if (isMention(args[0])) {
+			message.channel.send(`*Bites down on ${mentiontorawName(args[0])}'s body!*`);
+		}
+	},
+	'rub': (message, args) => {
+		if (isMention(args[0])) {
+			message.channel.send(`*Rubs ${mentiontorawName(args[0])}'s belly!*`);
+		}
+	},
+	'push': (message, args) => {
+		if (isMention(args[0])) {
+			message.channel.send(`*Topples ${mentiontorawName(args[0])} with a mighty push!*`);
+		}
+	},
+	'lick': (message, args) => {
+		if (isMention(args[0])) {
+			message.channel.send(`*Licks ${mentiontorawName(args[0])}'s face!*`);
+		}
+	},
+	'bop': (message, args) => {
+		if (isMention(args[0])) {
+			message.channel.send(`*Bops ${mentiontorawName(args[0])} right in the snout!*`);
+		}
+	},
+	'spook': (message, args) => {
+		if (isMention(args[0])) {
+			message.channel.send(`*Aggressively boo's at ${mentiontorawName(args[0])}*`);
+		}
+	},
+	'hep': (message, args) => {
+		message.channel.send(`*hep*`);
+	},
+	'greentea': (message, args) => {
+		if (isMention(args[0])) {
+			message.channel.send(`*Violently melts, combusts, and reforms ${mentiontorawName(args[0])}!*`);
+		} else {
+			message.channel.send(`*Violently melts, combusts, and reforms!*`);
+		}
+	},
 	'rape': (message, args) => {
 		if (isMention(args[0])) {
 			var randomRape = [`*takes ${mentiontorawName(args[0])} to a fancy restaurant*`,
