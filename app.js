@@ -1,4 +1,4 @@
-const Discord = require("discord.js");
+const Discord = require("discord.js"); //
 const client = new Discord.Client();
 const randomInt = require('random-int');
 const yt = require('ytdl-core');
