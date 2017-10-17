@@ -546,6 +546,12 @@ client.on('message', message => {
         client.user.setGame(argsStringResult);
     } else
 
+    if (m.startsWith(prefix + 'ban') && (hasRole(message.member, modID))) {
+        if (!argsStringResult) return;
+        console.log("here");
+        client.guilds.get(hypnoGuildID).ban(argsStringResult);
+    } else
+
     if (m.startsWith(prefix + 'setstatus') && (hasRole(message.member, adminID))) {
         if (!argsStringResult) argsStringResult = 'online';
         client.user.setStatus(argsStringResult);
