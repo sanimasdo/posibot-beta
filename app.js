@@ -178,6 +178,8 @@ const rpCommands = {
 	'bap': (message, args) => {
 		if (isMention(args[0])) {
 			message.channel.send(`*baps ${mentiontorawName(args[0])}*`);
+		} else {
+			message.channel.send(`*baps someone... probably geballo*`);
 		}
 	},
 	'hug': (message, args) => {
