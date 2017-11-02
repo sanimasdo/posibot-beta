@@ -521,7 +521,6 @@ client.on('guildBanRemove', (guild, user) => {
 //Message events (chat commands)
 
 client.on('message', message => {
-	console.log("message: " + message.content);
 
     if (message.author.bot) return; //to prevent a loop where the bot endlessley triggers itself to message
     if (message.channel.type === 'dm') { //to prevent DMs from doing shiieet to the bot
@@ -534,6 +533,10 @@ client.on('message', message => {
     let args = message.content.split(' ').slice(1);
     var argsStringResult = args.join(' ');
 	var m = message.content.toLowerCase();
+
+	if (m.startsWith(prefix)) {
+		console.log("message: " + message.content);
+	}
 
     if ((m.includes(prefix + 'donebeingnew')) && (message.channel.id == newcomerChannelID)) {
         message.delete();
