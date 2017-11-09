@@ -16,18 +16,17 @@ MongoClient.connect(url, function(err, db) {
 });
 
 const hypnoGuildID = process.env.ID_GUILD;
+const BypnoGuildID = "316719661116817418";
+
 const tulpaGuildID = "342114520468160515";
 const petplayGuildID = "342117220245307392";
-const PosiPosiGuildID = "346295740945006594";
-const mindscapeGuildID = "342114067093258240";
 const supportGuildID = "339130422699229195";
 const dpgGuildID = "315961954814525440";
 const mshGuildID = "214708520468086784";
-const BypnoGuildID = "316719661116817418";
+
 
 const pbotServers = [supportGuildID, BypnoGuildID, hypnoGuildID];
 
-const newID = process.env.ID_ROLE_NEW;
 const readyID = process.env.ID_ROLE_READY;
 const SFWID = process.env.ID_ROLE_SFW;
 const trustedID = process.env.ID_ROLE_TRUSTED;
@@ -194,7 +193,9 @@ const rpCommands = {
 	},
 	'jape': (message, args) => {
 		if (isMention(args[0])) {
-			message.channel.send(`*Pulls the wool over ${mentiontorawName(args[0])}'s eyes*`);
+			message.channel.send(`*pulls the wool over ${mentiontorawName(args[0])}'s eyes*`);
+		} else {
+			message.channel.send(`*Japes someone... probably Green Tea*`);
 		}
 	},
 	'slap': (message, args) => {
@@ -477,21 +478,26 @@ client.on('roleDelete', (role) => {
 
 //Guild events
 
+
+
 client.on('guildMemberAdd', member => {
-    client.channels.get(joinleaveChannelID).send(`+ + ${member.guild.name}: ${member.user} has joined.`);
+    client.guilds.get(hypnoGuildID).channels.get(joinleaveChannelID).send(`+ + ${member.guild.name}: ${member.user} has joined.`);
 	if (member.guild != client.guilds.get(hypnoGuildID)) return;
-    client.channels.get(newcomerChannelID).send(`Hi ${member.user},\nWelcome to ${member.guild.name}! Please start with these tips:
+	var randomSalutation = [`Hi`, `Hello`, `Greetings`, `Howdy`, `Hey`, `How goes it`, `Henlo`, `Wuzzaap`,];
+	var pick = randomInt(randomSalutation.length - 1);
+    client.guilds.get(hypnoGuildID).channels.get(newcomerChannelID).send(`${randomSalutation[pick]} ${member.user},\nWelcome to ${member.guild.name}! Please start with these tips:
 	1.  Read ${client.channels.get(welcomeAndRulesChannelID)}
-	2. Check out our website: https://www.positivityhypno.com/about/
-	3. Head to ${client.channels.get(worksafeGeneralChannelID)} and say hi!`);
+	2. Check out our youtube channel: https://www.youtube.com/channel/UCsq0pdsTO32V01DOSmKCzPA/videos
+	3. Check pinned messages in ${client.channels.get(roleRequestChannelID)} to get some roles
+	4. Head to ${client.channels.get(worksafeGeneralChannelID)} and say hi!`);
 });
 
 client.on('guildMemberRemove', member => {
-    client.channels.get(joinleaveChannelID).send(`- - ${member.guild.name}: ${member.user.username} has left.`);
+    client.guilds.get(hypnoGuildID).channels.get(joinleaveChannelID).send(`- - ${member.guild.name}: ${member.user.username} has left.`);
 });
 
 client.on('guildBanAdd', (guild, user) => {
-    client.channels.get(joinleaveChannelID).send(`${guild.name} bans ${user.username}.`);
+    client.guilds.get(hypnoGuildID).channels.get(joinleaveChannelID).send(`${guild.name} bans ${user.username}.`);
 	if (hypnoGuildID == BypnoGuildID) {
 		console.log(pbotServers);
 		for (var i = 0; i < pbotServers.length; i++) {
@@ -504,7 +510,7 @@ client.on('guildBanAdd', (guild, user) => {
 });
 
 client.on('guildBanRemove', (guild, user) => {
-    client.channels.get(joinleaveChannelID).send(`${guild.name} revokes the ban of ${user.username}.`);
+    client.guilds.get(hypnoGuildID).channels.get(joinleaveChannelID).send(`${guild.name} revokes the ban of ${user.username}.`);
 	if (hypnoGuildID == BypnoGuildID) {
 		console.log(pbotServers);
 		for (var i = 0; i < pbotServers.length; i++) {
@@ -528,7 +534,7 @@ client.on('message', message => {
         return;
     }
 	if (message.member.guild != client.guilds.get(hypnoGuildID)) return;
-    if ((raid) && (hasRole(message.member, newID)) && (!(message.channel.id == newcomerChannelID))) message.delete(); //deletes raider messages
+    if ((raid) && (!hasRole(message.member, trustedID)) && (!(message.channel.id == newcomerChannelID))) message.delete(); //deletes raider messages
 
     let args = message.content.split(' ').slice(1);
     var argsStringResult = args.join(' ');
