@@ -481,8 +481,13 @@ client.on('roleDelete', (role) => {
 
 
 client.on('guildMemberAdd', member => {
-    client.guilds.get(hypnoGuildID).channels.get(joinleaveChannelID).send(`+ + ${member.guild.name}: ${member.user} has joined.`);
-	if (member.guild != client.guilds.get(hypnoGuildID)) return;
+    
+	if (member.guild == client.guilds.get(hypnoGuildID)) {
+		client.guilds.get(hypnoGuildID).channels.get(joinleaveChannelID).send(`+ + ${member.guild.name}: ${member.user} has joined.`);
+	} else {
+		client.guilds.get(hypnoGuildID).channels.get(joinleaveChannelID).send(`+ + ${member.guild.name}: ${member.user.username} has joined.`);
+		return;
+	}
 	var randomSalutation = [`Hi`, `Hello`, `Greetings`, `Howdy`, `Hey`, `How goes it`, `Henlo`, `Wuzzaap`,];
 	var pick = randomInt(randomSalutation.length - 1);
     client.guilds.get(hypnoGuildID).channels.get(newcomerChannelID).send(`${randomSalutation[pick]} ${member.user},\nWelcome to ${member.guild.name}! Please start with these tips:
