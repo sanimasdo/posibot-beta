@@ -248,6 +248,13 @@ const rpCommands = {
 			message.channel.send(`*Violently melts, combusts, and reforms!*`);
 		}
 	},
+	'hair': (message, args) => {
+		if (isMention(args[0])) {
+			message.channel.send(`*Brushes and braids ${mentiontorawName(args[0])}'s hair!*`);
+		} else {
+			message.channel.send(`*Brushes someone's hair... probably Lil Witch*`);
+		}
+	},
 	'rape': (message, args) => {
 		if (isMention(args[0])) {
 			var randomRape = [`*takes ${mentiontorawName(args[0])} to a fancy restaurant*`,
@@ -563,9 +570,19 @@ client.on('message', message => {
     } else
 
     if (m.startsWith(prefix + 'ban') && (hasRole(message.member, modID))) {
-        if (!argsStringResult) return;
-        console.log("here");
+    	if (isMention(args[0])) {
+    		var user = args[0].replace(/</g, "").replace(/@/g, "").replace(/>/g, "").replace(/!/g, "");
+        	if (args.length > 1) {
+        		var reason = argsStringResult.slice(args[0].length);
+        		var banner = message.member.user.username;
+				client.guilds.get(hypnoGuildID).channels.get(joinleaveChannelID).send(`      ${mentiontorawName(args[0])} BAN REASON:${reason}`);
+				client.guilds.get(hypnoGuildID).ban(user, banner + " banned them for this reason: " + reason);
+			} else {
+				client.guilds.get(hypnoGuildID).ban(user);
+			}
+		}
         client.guilds.get(hypnoGuildID).ban(argsStringResult);
+
     } else
 
     if (m.startsWith(prefix + 'setstatus') && (hasRole(message.member, adminID))) {
