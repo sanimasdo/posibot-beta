@@ -20,6 +20,7 @@
     "nodemon": "^1.12.1",
     "ontime": "0.0.3",
     "random-int": "^1.0.0",
+    "update-notifier": "^2.3.0",
     "ytdl-core": "github:fent/node-ytdl-core#master"
   }
 }
