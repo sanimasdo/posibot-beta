@@ -570,18 +570,21 @@ client.on('message', message => {
     } else
 
     if (m.startsWith(prefix + 'ban') && (hasRole(message.member, modID))) {
-    	if (isMention(args[0])) {
-    		var user = args[0].replace(/</g, "").replace(/@/g, "").replace(/>/g, "").replace(/!/g, "");
-        	if (args.length > 1) {
-        		var reason = argsStringResult.slice(args[0].length);
-        		var banner = message.member.user.username;
-				client.guilds.get(hypnoGuildID).channels.get(joinleaveChannelID).send(`      ${mentiontorawName(args[0])} BAN REASON:${reason}`);
-				client.guilds.get(hypnoGuildID).ban(user, banner + " banned them for this reason: " + reason);
-			} else {
-				client.guilds.get(hypnoGuildID).ban(user);
-			}
-		}
-        client.guilds.get(hypnoGuildID).ban(argsStringResult);
+    	var userid = args[0].replace(/</g, "").replace(/@/g, "").replace(/>/g, "").replace(/!/g, "");
+    	client.fetchUser(userid)
+		    .then((user) => {
+		        if (args.length > 1) {
+	        		var reason = argsStringResult.slice(args[0].length);
+	        		var banner = message.member.user.username;
+					client.guilds.get(hypnoGuildID).channels.get(joinleaveChannelID).send(`      ${user} BAN REASON:${reason}`);
+					client.guilds.get(hypnoGuildID).ban(user, banner + " banned them for this reason: " + reason);
+		        } else {
+					client.guilds.get(hypnoGuildID).ban(user);
+				}
+		    })
+		    .catch((err) => {
+		        message.channel.send(args[0] + " is not a real user.");
+		    })
 
     } else
 
