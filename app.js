@@ -569,7 +569,7 @@ client.on('message', message => {
         client.user.setGame(argsStringResult);
     } else
 
-    if (m.startsWith(prefix + 'ban') && (hasRole(message.member, modID))) {
+    if (m.startsWith(prefix + 'ban') && ((hasRole(message.member, modID)) || (hasRole(message.member, adminID)))) {
     	var userid = args[0].replace(/</g, "").replace(/@/g, "").replace(/>/g, "").replace(/!/g, "");
     	client.fetchUser(userid)
 		    .then((user) => {
