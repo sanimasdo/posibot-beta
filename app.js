@@ -545,6 +545,7 @@ client.on('message', message => {
         console.log(message.author.username + ": " + message.content);
         return;
     }
+    if (message.member == null) return;
 	if (message.member.guild != client.guilds.get(hypnoGuildID)) return;
     if ((raid) && (!hasRole(message.member, trustedID)) && (!(message.channel.id == newcomerChannelID))) message.delete(); //deletes raider messages
 
