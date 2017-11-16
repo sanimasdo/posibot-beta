@@ -255,6 +255,9 @@ const rpCommands = {
 			message.channel.send(`*Brushes someone's hair... probably Lil Witch*`);
 		}
 	},
+	'timber': (message, args) => {
+		message.channel.send('``Timber.jar has experienced fatal: java.Lang.Error.ArithmeticException: / by diamond``');
+	},
 	'rape': (message, args) => {
 		if (isMention(args[0])) {
 			var randomRape = [`*takes ${mentiontorawName(args[0])} to a fancy restaurant*`,
