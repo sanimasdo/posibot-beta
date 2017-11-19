@@ -258,6 +258,13 @@ const rpCommands = {
 	'timber': (message, args) => {
 		message.channel.send('``Timber.jar has experienced fatal: java.Lang.Error.ArithmeticException: / by diamond``');
 	},
+	'jakepaul': (message, args) => {
+		if (isMention(args[0])) {
+			message.channel.send(`*joins ${mentiontorawName(args[0])} in marriage with their loving partner, Jake Paul.*`);
+		} else {
+			message.channel.send(`*joins Kayla in marriage with their loving partner, Jake Paul.*`);
+		}
+	},
 	'rape': (message, args) => {
 		if (isMention(args[0])) {
 			var randomRape = [`*takes ${mentiontorawName(args[0])} to a fancy restaurant*`,
