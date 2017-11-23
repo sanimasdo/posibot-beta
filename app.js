@@ -678,7 +678,8 @@ client.on('message', message => {
 			deleteTheMessages(message, 100);
 			deleteTheMessages(message, 100);
 			deleteTheMessages(message, 100);
-			message.channel.send(`This room is for public text sessions. At the end of the session, all messages excluding this one will be purged from the channel.`);
+			message.channel.send(`This room is for public text sessions. At the end of the session, all messages excluding this one will be purged from the channel.
+									To purge all message from this room, type phendsession`);
 		}
     } else
 
