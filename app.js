@@ -186,6 +186,8 @@ const rpCommands = {
 	'hug': (message, args) => {
 		if (isMention(args[0])) {
 			message.channel.send(`*hugs ${mentiontorawName(args[0])}*`);
+		} else {
+			message.channel.send(`*Hugs someone... probably Tombstone*`);
 		}
 	},
 	'snuggle': (message, args) => {
