@@ -32,6 +32,7 @@ const SFWID = process.env.ID_ROLE_SFW;
 const trustedID = process.env.ID_ROLE_TRUSTED;
 const modID = process.env.ID_ROLE_MOD;
 const adminID = process.env.ID_ROLE_ADMIN;
+const hypnoteamID = process.env.ID_ROLE_HYPNOTEAM;
 
 const newcomerChannelID = process.env.ID_CHANNEL_NEWCOMERS;
 const joinleaveChannelID = process.env.ID_CHANNEL_JOINLEAVE;
@@ -41,6 +42,7 @@ const worksafeGeneralChannelID = process.env.ID_CHANNEL_WORKSAFEGENERAL;
 const nsfwGeneralChannelID = process.env.ID_CHANNEL_NSFWGENERAL;
 const roleRequestChannelID = process.env.ID_CHANNEL_ROLEREQUEST;
 const botChannelID = process.env.ID_CHANNEL_BOT;
+const sessionroomChannelID = process.env.ID_CHANNEL_SESSIONROOM;
 
 const readylog = process.env.READY_LOG;
 const prefix = process.env.PREFIX;
@@ -184,6 +186,8 @@ const rpCommands = {
 	'hug': (message, args) => {
 		if (isMention(args[0])) {
 			message.channel.send(`*hugs ${mentiontorawName(args[0])}*`);
+		} else {
+			message.channel.send(`*hugs someone... probably Tombstone*`);
 		}
 	},
 	'snuggle': (message, args) => {
@@ -253,6 +257,16 @@ const rpCommands = {
 			message.channel.send(`*Brushes and braids ${mentiontorawName(args[0])}'s hair!*`);
 		} else {
 			message.channel.send(`*Brushes someone's hair... probably Lil Witch*`);
+		}
+	},
+	'timber': (message, args) => {
+		message.channel.send('``Timber.jar has experienced fatal: java.Lang.Error.ArithmeticException: / by diamond``');
+	},
+	'jakepaul': (message, args) => {
+		if (isMention(args[0])) {
+			message.channel.send(`*joins ${mentiontorawName(args[0])} in marriage with their loving partner, Jake Paul.*`);
+		} else {
+			message.channel.send(`*joins Kayla in marriage with their loving partner, Jake Paul.*`);
 		}
 	},
 	'rape': (message, args) => {
@@ -409,7 +423,7 @@ function deleteTheMessages(message, number) {
         var msg;
         if (isNaN(number) || (number < 2)) { //if PHdelete with no valid argument
             msg = 2; //delete only PHdelete and the message than came immediately before
-        } else { //else, delete args[1] messages
+        } else { //else, delete args[0] messages
             msg = parseInt(number);
         }
         message.channel.fetchMessages({limit: msg}).then(messages => message.channel.bulkDelete(messages)).catch(console.error);
@@ -681,6 +695,20 @@ client.on('message', message => {
 			dispatcher.on('end', () => voiceChannel.leave());
 		});
 	} else */
+
+    if (m.startsWith(prefix + 'endsession')) {
+		if (!(hasRole(message.member, hypnoteamID) && (message.channel.id == sessionroomChannelID))) {
+			message.channel.send(`You either don't have the hypnoteam role or are not in ${client.channels.get(sessionroomChannelID)}.`);
+		} else {
+			deleteTheMessages(message, 100);
+			deleteTheMessages(message, 100);
+			deleteTheMessages(message, 100);
+			deleteTheMessages(message, 100);
+			deleteTheMessages(message, 100);
+			message.channel.send(`This room is for public text sessions. At the end of the session, all messages excluding this one will be purged from the channel.
+									To purge all message from this room, type phendsession`);
+		}
+    } else
 
     if (m.startsWith(prefix + 'delete') && (hasRole(message.member, adminID))) {
         deleteTheMessages(message, args[0]);
