@@ -584,25 +584,6 @@ client.on('message', message => {
         client.user.setGame(argsStringResult);
     } else
 
-    if (m.startsWith(prefix + 'ban') && ((hasRole(message.member, modID)) || (hasRole(message.member, adminID)))) {
-    	var userid = args[0].replace(/</g, "").replace(/@/g, "").replace(/>/g, "").replace(/!/g, "");
-    	client.fetchUser(userid)
-		    .then((user) => {
-		        if (args.length > 1) {
-	        		var reason = argsStringResult.slice(args[0].length);
-	        		var banner = message.member.user.username;
-					client.guilds.get(hypnoGuildID).channels.get(joinleaveChannelID).send(`      ${user} BAN REASON:${reason}`);
-					client.guilds.get(hypnoGuildID).ban(user, banner + " banned them for this reason: " + reason);
-		        } else {
-					client.guilds.get(hypnoGuildID).ban(user);
-				}
-		    })
-		    .catch((err) => {
-		        message.channel.send(args[0] + " is not a real user.");
-		    })
-
-    } else
-
     if (m.startsWith(prefix + 'banall') && ((hasRole(message.member, modID)) || (hasRole(message.member, adminID)))) {
     	var userid = args[0].replace(/</g, "").replace(/@/g, "").replace(/>/g, "").replace(/!/g, "");
     	client.fetchUser(userid)
@@ -620,6 +601,25 @@ client.on('message', message => {
 					client.guilds.get("342117220245307392").ban(user);
 					client.guilds.get("339130422699229195").ban(user);
 					client.guilds.get("342114520468160515").ban(user);
+				}
+		    })
+		    .catch((err) => {
+		        message.channel.send(args[0] + " is not a real user.");
+		    })
+
+    } else
+
+    if (m.startsWith(prefix + 'ban') && ((hasRole(message.member, modID)) || (hasRole(message.member, adminID)))) {
+    	var userid = args[0].replace(/</g, "").replace(/@/g, "").replace(/>/g, "").replace(/!/g, "");
+    	client.fetchUser(userid)
+		    .then((user) => {
+		        if (args.length > 1) {
+	        		var reason = argsStringResult.slice(args[0].length);
+	        		var banner = message.member.user.username;
+					client.guilds.get(hypnoGuildID).channels.get(joinleaveChannelID).send(`      ${user} BAN REASON:${reason}`);
+					client.guilds.get(hypnoGuildID).ban(user, banner + " banned them for this reason: " + reason);
+		        } else {
+					client.guilds.get(hypnoGuildID).ban(user);
 				}
 		    })
 		    .catch((err) => {
