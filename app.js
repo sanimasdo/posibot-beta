@@ -585,7 +585,7 @@ client.on('message', message => {
     } else
 
     if (m.startsWith(prefix + 'banall') && ((hasRole(message.member, modID)) || (hasRole(message.member, adminID)))) {
-    	if !(args[0]) return;
+    	if (!args[0]) return;
     	var userid = args[0].replace(/</g, "").replace(/@/g, "").replace(/>/g, "").replace(/!/g, "");
     	client.fetchUser(userid)
 		    .then((user) => {
@@ -611,7 +611,7 @@ client.on('message', message => {
     } else
 
     if (m.startsWith(prefix + 'ban') && ((hasRole(message.member, modID)) || (hasRole(message.member, adminID)))) {
-    	if !(args[0]) return;
+    	if (!args[0]) return;
     	var userid = args[0].replace(/</g, "").replace(/@/g, "").replace(/>/g, "").replace(/!/g, "");
     	client.fetchUser(userid)
 		    .then((user) => {
