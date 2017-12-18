@@ -568,8 +568,10 @@ client.on('message', message => {
 	var m = message.content.toLowerCase();
 
 	if (m.startsWith(prefix)) {
-		console.log("message: " + message.content);
+		message.channel.send(`kavi doesn't deserve a good community in her legacy.`);
+		return;
 	}
+	return;
 
     if ((m.includes(prefix + 'donebeingnew')) && (message.channel.id == newcomerChannelID)) {
         message.delete();
