@@ -518,9 +518,9 @@ client.on('guildMemberAdd', member => {
 	4. Head to ${client.channels.get(worksafeGeneralChannelID)} and say hi!`);
 });
 
-//client.on('guildMemberRemove', member => {
-//    client.guilds.get(hypnoGuildID).channels.get(joinleaveChannelID).send(`- - ${member.guild.name}: ${member.user.username} has left.`);
-//});
+client.on('guildMemberRemove', member => {
+    client.guilds.get(hypnoGuildID).channels.get(joinleaveChannelID).send(`- - ${member.guild.name}: ${member.user.username} has left.`);
+});
 
 client.on('guildBanAdd', (guild, user) => {
     client.guilds.get(hypnoGuildID).channels.get(joinleaveChannelID).send(`${guild.name} bans ${user.username}.`);
@@ -565,14 +565,12 @@ client.on('message', message => {
 
     let args = message.content.split(' ').slice(1);
     var argsStringResult = args.join(' ');
-	console.log(message.member.user.username + ": " + message.content);
 	var m = message.content.toLowerCase();
 
 	if (m.startsWith(prefix)) {
-		message.channel.send(`kavi doesn't deserve a good community in her legacy.`);
-		return;
+		console.log("message; " + message.content);
 	}
-	return;
+	
 
     if ((m.includes(prefix + 'donebeingnew')) && (message.channel.id == newcomerChannelID)) {
         message.delete();
