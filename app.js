@@ -565,6 +565,7 @@ client.on('message', message => {
 
     let args = message.content.split(' ').slice(1);
     var argsStringResult = args.join(' ');
+	console.log(message.member.user.username + ": " + message.content);
 	var m = message.content.toLowerCase();
 
 	if (m.startsWith(prefix)) {
