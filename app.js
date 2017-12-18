@@ -518,9 +518,9 @@ client.on('guildMemberAdd', member => {
 	4. Head to ${client.channels.get(worksafeGeneralChannelID)} and say hi!`);
 });
 
-client.on('guildMemberRemove', member => {
-    client.guilds.get(hypnoGuildID).channels.get(joinleaveChannelID).send(`- - ${member.guild.name}: ${member.user.username} has left.`);
-});
+//client.on('guildMemberRemove', member => {
+//    client.guilds.get(hypnoGuildID).channels.get(joinleaveChannelID).send(`- - ${member.guild.name}: ${member.user.username} has left.`);
+//});
 
 client.on('guildBanAdd', (guild, user) => {
     client.guilds.get(hypnoGuildID).channels.get(joinleaveChannelID).send(`${guild.name} bans ${user.username}.`);
